@@ -32,3 +32,9 @@ class AbstractArray(abc.ABC, typing.Generic[E]):
     @abc.abstractmethod
     def next(self) -> E:
         pass
+
+    def __iter__(self) -> "AbstractArray":
+        return self.iter()
+
+    def __next__(self) -> E:
+        return self.next()
