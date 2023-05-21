@@ -87,3 +87,12 @@ class Array(AbstractArray[E]):
         element = self._elements[self._iter_index]
         self._iter_index += 1
         return element
+
+
+if __name__ == "__main__":
+    arr: Array[int] = Array(5)
+    for i in range(5):
+        arr[i] = i * 100
+
+    for d in arr:
+        print(d)
