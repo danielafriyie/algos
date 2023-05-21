@@ -38,3 +38,6 @@ class AbstractArray(abc.ABC, typing.Generic[E]):
 
     def __next__(self) -> E:
         return self.next()
+
+    def __len__(self) -> int:
+        return self.length()
