@@ -22,7 +22,7 @@ class HashMap(typing.Generic[K, V]):
         self._capacity = capacity
         self._load_factor = load_factor
         self._load_factor_multiplier = 2
-        self._buckets: list[deque[Pair]] = self._capacity * [deque()]
+        self._buckets: list[deque[Pair]] = [deque() for _ in range(self._capacity)]
 
     @classmethod
     def from_dict(cls, dictionary: dict[K, V], capacity: typing.Optional[int] = None) -> "HashMap":
@@ -123,7 +123,7 @@ class HashMap(typing.Generic[K, V]):
 
 
 if __name__ == "__main__":
-    h: HashMap[str, int] = HashMap(100)
+    h: HashMap[str, int] = HashMap()
     h["hey"] = 23
     h["five"] = 5
     h["easy"] = 0
