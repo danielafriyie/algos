@@ -13,7 +13,7 @@ class Pair(typing.NamedTuple):
     value: V
 
 
-class HashTable(typing.Generic[K, V]):
+class HashMap(typing.Generic[K, V]):
 
     def __init__(self, capacity: typing.Optional[int] = 50, load_factor: typing.Optional[float] = 0.75) -> None:
         if capacity < 1:
@@ -25,14 +25,14 @@ class HashTable(typing.Generic[K, V]):
         self._buckets: list[deque[Pair]] = self._capacity * [deque()]
 
     @classmethod
-    def from_dict(cls, dictionary: dict[K, V], capacity: typing.Optional[int] = None) -> "HashTable":
+    def from_dict(cls, dictionary: dict[K, V], capacity: typing.Optional[int] = None) -> "HashMap":
         hash_table = cls(capacity or len(dictionary) * 10)
         for key, value in dictionary.items():
             hash_table[key] = value
         return hash_table
 
     @classmethod
-    def from_hashtable(cls, hash_table: "HashTable[K, V]", capacity: typing.Optional[int] = 50) -> "HashTable":
+    def from_hashtable(cls, hash_table: "HashMap[K, V]", capacity: typing.Optional[int] = 50) -> "HashMap":
         ht = cls(capacity)
         for key, value in hash_table.pairs:
             ht[key] = value
@@ -123,7 +123,7 @@ class HashTable(typing.Generic[K, V]):
 
 
 if __name__ == "__main__":
-    h: HashTable[str, int] = HashTable(100)
+    h: HashMap[str, int] = HashMap(100)
     h["hey"] = 23
     h["five"] = 5
     h["easy"] = 0
