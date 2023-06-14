@@ -90,6 +90,7 @@ class Node(typing.Generic[T]):
             return ""
 
         children, edge = "", ""
+        padding = " " * self.size
         if left:
             d = f"{left.data}"
             diff = len(d) - 1
@@ -106,10 +107,10 @@ class Node(typing.Generic[T]):
             edge += "\\"
             children += f"({d})"
 
-        space = "-" * len(edge)
+        space = padding + ("-" * len(edge))
         if self._parent is None:
-            return "\n".join([" " * ((self._size // 2) + 1) + f"({self._data})", space, edge, children])
-        return "\n".join([space, edge, children])
+            return "\n".join([padding + (" " * ((self._size // 2) + 1) + f"({self._data})"), space, padding + edge, padding + children])
+        return "\n".join([space, padding + edge, padding + children])
 
 
 class ExpressionTree:
@@ -184,6 +185,6 @@ class ExpressionTree:
 
 
 if __name__ == "__main__":
-    et = ExpressionTree("((2 * 7) + 8)")
+    et = ExpressionTree("(((2 * 7) + 8) + 4)")
     pretty_print(et.tree)
     # print(et)
