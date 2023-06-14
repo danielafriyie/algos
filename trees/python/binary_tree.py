@@ -106,7 +106,7 @@ class Node(typing.Generic[T]):
             edge += "\\"
             children += f"({d})"
 
-        space = "-" * len(children)
+        space = "-" * len(edge)
         if head:
             return "\n".join([" " * ((self._size // 2) + 1) + f"({self._data})", space, edge, children])
         return "\n".join([space, edge, children])
@@ -165,6 +165,11 @@ class ExpressionTree:
                 elif value == ")":
                     current_node = current_node.parent
                 elif value in self.OPERANDS:
+                    if current_node is None:
+                        node = Node()
+                        node.left = root
+                        root = node
+                        current_node = node
                     current_node.data = value
                     if current_node.left is None:
                         raise ValueError(f"Invalid expression: '{self._exp}'")
@@ -184,6 +189,6 @@ class ExpressionTree:
 
 
 if __name__ == "__main__":
-    et = ExpressionTree("((2 * 7) + 8)")
+    et = ExpressionTree("((2 * 7) + 8) + 4")
     pretty_print(et.tree)
     # print(et)
