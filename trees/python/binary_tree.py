@@ -5,7 +5,7 @@ T = typing.TypeVar("T")
 
 class Node(typing.Generic[T]):
 
-    def __init__(self, data: T) -> None:
+    def __init__(self, data: typing.Optional[T] = None) -> None:
         self._data = data
         self._left = None
         self._right = None
