@@ -118,7 +118,7 @@ class ExpressionTree:
     e.g: 23+4
     """
 
-    OPERANDS = ["+", "-", "*", "/"]
+    OPERTORS = ["+", "-", "*", "/"]
 
     def __init__(self, exp: str) -> None:
         self._exp = exp.strip().replace(" ", "")
@@ -129,7 +129,7 @@ class ExpressionTree:
         if len(lst) <= 0:
             return n
         next_ = lst[0]
-        if next_.isdigit():
+        if next_.isdigit() or (next_ == "."):
             return n + ExpressionTree.get_number(next_, lst[1:])
         return n
 
@@ -145,8 +145,11 @@ class ExpressionTree:
         while len(expression_list) > 0:
             try:
                 value = expression_list.pop(0)
-                if value.isdigit():
+                if value.isdigit() or (value == "."):
                     n = self.get_number(value, expression_list)
+                    if "." in n:
+                        for i in range(1, len(n)):
+                            expression_list.remove(n[i])
                     if current_node is root:
                         node = Node(n)
                         if current_node.left is None:
@@ -165,7 +168,7 @@ class ExpressionTree:
                         current_node = current_node.right
                 elif value == ")":
                     current_node = current_node.parent
-                elif value in self.OPERANDS:
+                elif value in self.OPERTORS:
                     current_node.data = value
                     if current_node.left is None:
                         raise ValueError(f"Invalid expression: '{self._exp}'")
@@ -180,11 +183,30 @@ class ExpressionTree:
 
         return root
 
+    def _eval(self, left: str, right: str, operator: str) -> float:
+        return eval(f"{left} {operator} {right}")
+
+    def _evaluate(self, node: Node) -> float:
+        left_val = self._get_value(node.left)
+        right_val = self._get_value(node.right)
+        return self._eval(f"{left_val}", f"{right_val}", node.data)
+
+    def _get_value(self, node: Node) -> float:
+        if node.data in self.OPERTORS:
+            return self._evaluate(node)
+        return float(node.data)
+
+    def evaluate(self) -> float:
+        left_val = self._get_value(self._tree.left)
+        right_val = self._get_value(self._tree.right)
+        return self._eval(f"{left_val}", f"{right_val}", self._tree.data)
+
     def __str__(self) -> str:
         return str(self._tree)
 
 
 if __name__ == "__main__":
-    et = ExpressionTree("(((2 * 7) + 8) + 4)")
+    expression = "(((2 * 7) + 8) + 4)"
+    et = ExpressionTree(expression)
+    print(et.evaluate(), "=", eval(expression))
     pretty_print(et.tree)
-    # print(et)
