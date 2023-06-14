@@ -17,6 +17,8 @@ class Node(typing.Generic[T]):
 
     @data.setter
     def data(self, data: T) -> None:
+        if self._data is not None:
+            raise Exception("Data is already set!")
         self._data = data
 
     @property
@@ -51,8 +53,81 @@ class Node(typing.Generic[T]):
         self._right = node
         node.parent = self
 
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}({self._data})"
 
-# =============================================
-# EXPRESSION EVALUATION
-# =============================================
 
+class ExpressionTree:
+    """
+    e.g: 23+4
+    """
+
+    OPERANDS = ["+", "-", "*", "/"]
+
+    def __init__(self, exp: str) -> None:
+        self._exp = exp.strip().replace(" ", "")
+        self._tree = self.build_tree()
+
+    @staticmethod
+    def get_number(n: str, lst: list[str]) -> str:
+        if len(lst) <= 0:
+            return n
+        next_ = lst[0]
+        if next_.isdigit():
+            return n + ExpressionTree.get_number(next_, lst[1:])
+        return n
+
+    @property
+    def tree(self) -> Node:
+        return self._tree
+
+    def build_tree(self) -> Node:
+        exp_list = [*self._exp]
+
+        root = Node()
+        current_node = root
+        while len(exp_list) > 0:
+            try:
+                value = exp_list.pop(0)
+                if value.isdigit():
+                    n = self.get_number(value, exp_list)
+                    if current_node is root:
+                        node = Node(n)
+                        if current_node.left is None:
+                            current_node.left = node
+                        else:
+                            current_node.right = node
+                    else:
+                        current_node.data = n
+                        current_node = current_node.parent
+                elif value == "(":
+                    if current_node.left is None:
+                        current_node.left = Node()
+                        current_node = current_node.left
+                    else:
+                        current_node.right = Node()
+                        current_node = current_node.right
+                elif value == ")":
+                    current_node = current_node.parent
+                elif value in self.OPERANDS:
+                    current_node.data = value
+                    if current_node.left is None:
+                        raise ValueError(f"Invalid expression: '{self._exp}'")
+                    elif current_node.right is not None:
+                        raise ValueError(f"Invalid expression: '{self._exp}'")
+                    current_node.right = Node()
+                    current_node = current_node.right
+                else:
+                    raise ValueError(f"Invalid expression: '{self._exp}'")
+            except IndexError:
+                break
+
+        return root
+
+    def __str__(self) -> str:
+        return str(self._tree)
+
+
+if __name__ == "__main__":
+    et = ExpressionTree("((2 * 7) + 8)")
+    print(et)
