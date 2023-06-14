@@ -3,6 +3,10 @@ import typing
 T = typing.TypeVar("T")
 
 
+def pretty_print(node: "Node") -> None:
+    pass
+
+
 class Node(typing.Generic[T]):
 
     def __init__(self, data: typing.Optional[T] = None) -> None:
@@ -10,6 +14,7 @@ class Node(typing.Generic[T]):
         self._left = None
         self._right = None
         self._parent = None
+        self._size = 0
 
     @property
     def data(self) -> T:
@@ -22,6 +27,16 @@ class Node(typing.Generic[T]):
         self._data = data
 
     @property
+    def size(self) -> int:
+        return self._size + 1
+
+    @size.setter
+    def size(self, n: int) -> None:
+        self._size += n
+        if self._parent:
+            self._parent.size = n
+
+    @property
     def parent(self) -> "Node":
         return self._parent
 
@@ -30,6 +45,7 @@ class Node(typing.Generic[T]):
         if self._parent is not None:
             raise Exception("Parent already set!")
         self._parent = node
+        self.size = 1
 
     @property
     def left(self) -> "Node":
@@ -55,6 +71,32 @@ class Node(typing.Generic[T]):
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}({self._data})"
+
+    def to_string(self) -> str:
+        left, right = self._left, self._right
+
+        if (left is None) and (right is None):
+            return f"({self._data})"
+
+        children, edge = "", ""
+        if left:
+            d = f"{left.data}"
+            diff = len(d) - 1
+            if diff > 0:
+                edge += (" " * diff)
+            edge += " /" + (" " * self.size)
+            children += f"({d})" + (" " * self._size)
+
+        if right:
+            d = f"{right.data}"
+            diff = len(d) - 1
+            if diff > 0:
+                edge += " " * diff
+            edge += "\\"
+            children += f"({d})"
+
+        space = "-" * len(children)
+        return "\n".join([" " * ((self._size // 2) + 1) + f"({self._data})", space, edge, children])
 
 
 class ExpressionTree:
@@ -130,4 +172,5 @@ class ExpressionTree:
 
 if __name__ == "__main__":
     et = ExpressionTree("((2 * 7) + 8)")
-    print(et)
+    pretty_print(et.tree)
+    # print(et)
