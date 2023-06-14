@@ -3,8 +3,19 @@ import typing
 T = typing.TypeVar("T")
 
 
+def to_string(node: "Node", head: bool) -> str:
+    output = node.to_string(head)
+    left, right = node.left, node.right
+    if left:
+        output += "\n" + to_string(left, False)
+    if right:
+        output += "\n" + to_string(right, False)
+    return output
+
+
 def pretty_print(node: "Node") -> None:
-    pass
+    s = to_string(node, True)
+    print(s)
 
 
 class Node(typing.Generic[T]):
@@ -72,11 +83,11 @@ class Node(typing.Generic[T]):
     def __str__(self) -> str:
         return f"{self.__class__.__name__}({self._data})"
 
-    def to_string(self) -> str:
+    def to_string(self, head: bool) -> str:
         left, right = self._left, self._right
 
         if (left is None) and (right is None):
-            return f"({self._data})"
+            return ""
 
         children, edge = "", ""
         if left:
@@ -96,7 +107,9 @@ class Node(typing.Generic[T]):
             children += f"({d})"
 
         space = "-" * len(children)
-        return "\n".join([" " * ((self._size // 2) + 1) + f"({self._data})", space, edge, children])
+        if head:
+            return "\n".join([" " * ((self._size // 2) + 1) + f"({self._data})", space, edge, children])
+        return "\n".join([space, edge, children])
 
 
 class ExpressionTree:
