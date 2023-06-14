@@ -165,11 +165,6 @@ class ExpressionTree:
                 elif value == ")":
                     current_node = current_node.parent
                 elif value in self.OPERANDS:
-                    if current_node is None:
-                        node = Node()
-                        node.left = root
-                        root = node
-                        current_node = node
                     current_node.data = value
                     if current_node.left is None:
                         raise ValueError(f"Invalid expression: '{self._exp}'")
@@ -189,6 +184,6 @@ class ExpressionTree:
 
 
 if __name__ == "__main__":
-    et = ExpressionTree("((2 * 7) + 8) + 4")
+    et = ExpressionTree("((2 * 7) + 8)")
     pretty_print(et.tree)
     # print(et)
