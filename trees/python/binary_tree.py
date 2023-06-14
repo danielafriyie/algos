@@ -90,7 +90,7 @@ class Node(typing.Generic[T]):
             return ""
 
         children, edge = "", ""
-        padding = " " * self.size
+        padding = " " * (self._size // 2)
         if left:
             d = f"{left.data}"
             diff = len(d) - 1
