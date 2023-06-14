@@ -1,8 +1,5 @@
-import os
 import typing
 from collections import deque
-
-os.environ["PYTHONHASHSEED"] = "0"
 
 K = typing.TypeVar("K")
 V = typing.TypeVar("V")
