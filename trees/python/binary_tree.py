@@ -1,13 +1,23 @@
 import typing
 
+T = typing.TypeVar("T")
 
-class Node:
 
-    def __init__(self, data: typing.Any) -> None:
+class Node(typing.Generic[T]):
+
+    def __init__(self, data: T) -> None:
         self._data = data
         self._left = None
         self._right = None
         self._parent = None
+
+    @property
+    def data(self) -> T:
+        return self._data
+
+    @data.setter
+    def data(self, data: T) -> None:
+        self._data = data
 
     @property
     def parent(self) -> "Node":
