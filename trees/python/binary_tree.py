@@ -3,18 +3,18 @@ import typing
 T = typing.TypeVar("T")
 
 
-def to_string(node: "Node", head: bool) -> str:
-    output = node.to_string(head)
+def to_string(node: "Node") -> str:
+    output = node.to_string()
     left, right = node.left, node.right
     if left:
-        output += "\n" + to_string(left, False)
+        output += "\n" + to_string(left)
     if right:
-        output += "\n" + to_string(right, False)
+        output += "\n" + to_string(right)
     return output
 
 
 def pretty_print(node: "Node") -> None:
-    s = to_string(node, True)
+    s = to_string(node)
     print(s)
 
 
@@ -83,7 +83,7 @@ class Node(typing.Generic[T]):
     def __str__(self) -> str:
         return f"{self.__class__.__name__}({self._data})"
 
-    def to_string(self, head: bool) -> str:
+    def to_string(self) -> str:
         left, right = self._left, self._right
 
         if (left is None) and (right is None):
@@ -107,7 +107,7 @@ class Node(typing.Generic[T]):
             children += f"({d})"
 
         space = "-" * len(edge)
-        if head:
+        if self._parent is None:
             return "\n".join([" " * ((self._size // 2) + 1) + f"({self._data})", space, edge, children])
         return "\n".join([space, edge, children])
 
