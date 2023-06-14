@@ -81,16 +81,13 @@ class ExpressionTree:
     def tree(self) -> Node:
         return self._tree
 
-    def build_tree(self) -> Node:
-        exp_list = [*self._exp]
-
-        root = Node()
+    def _build_tree_loop(self, root: Node, expression_list: list[str]) -> None:
         current_node = root
-        while len(exp_list) > 0:
+        while len(expression_list) > 0:
             try:
-                value = exp_list.pop(0)
+                value = expression_list.pop(0)
                 if value.isdigit():
-                    n = self.get_number(value, exp_list)
+                    n = self.get_number(value, expression_list)
                     if current_node is root:
                         node = Node(n)
                         if current_node.left is None:
@@ -121,6 +118,13 @@ class ExpressionTree:
                     raise ValueError(f"Invalid expression: '{self._exp}'")
             except IndexError:
                 break
+
+    def build_tree(self) -> Node:
+        exp_list = [*self._exp]
+
+        root = Node()
+
+        self._build_tree_loop(root, exp_list)
 
         return root
 
