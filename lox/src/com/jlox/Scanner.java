@@ -1,4 +1,4 @@
 package com.jlox;
 
-public class Scaner {
+public class Scanner {
 }
