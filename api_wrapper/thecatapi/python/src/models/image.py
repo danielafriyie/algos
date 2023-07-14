@@ -1,8 +1,8 @@
 import typing
 
-import model
-import breed
-import category
+from . import model
+from . import breed
+from . import category
 
 
 class Image(model.Model):

@@ -1,6 +1,6 @@
 import typing
 
-import model
+from . import model
 
 
 class Category(model.Model):

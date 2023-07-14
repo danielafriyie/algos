@@ -1,3 +1,4 @@
+import json
 import typing
 import logging
 
@@ -9,9 +10,10 @@ import exceptions
 class Adapter:
 
     def __init__(self,
+                 scheme: str,
                  hostname: str,
+                 version: str,
                  api_key: typing.Optional[str] = "",
-                 version: typing.Optional[str] = "v1",
                  ssl_verify: typing.Optional[bool] = True,
                  logger: typing.Optional[logging.Logger] = None) -> None:
         self._hostname = hostname
@@ -19,17 +21,24 @@ class Adapter:
         self._version = version
         self._ssl_verify = ssl_verify
         self._logger = logger or logging.getLogger("thecatapi")
-        self._BASE_URL = f"https://{self._hostname}/{self._version}/"
+        self._BASE_URL = f"{scheme}://{hostname}/{version}/"
         self._session = rq.Session()
         self._session.verify = self._ssl_verify
         self._session.headers.update({
-            "x-api-key": self._api_key,
+            "x-api-key": api_key,
             # "Content-Type": "application/json"
         })
 
         if not ssl_verify:
             self._logger.warning("SSL verification disabled! Enabling it is strongly advised!")
             rq.packages.urllib3.disable_warnings()
+
+    @staticmethod
+    def to_json(response: rq.Response) -> typing.Union[dict, list]:
+        try:
+            return response.json()
+        except (ValueError, json.JSONDecodeError):
+            raise exceptions.TheCatAPIException(f"Bad json!\n{response.text}")
 
     def request(self,
                 method: typing.Literal["GET", "POST", "DELETE"],
