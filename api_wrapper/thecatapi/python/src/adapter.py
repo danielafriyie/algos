@@ -24,7 +24,7 @@ class Adapter:
         self._session.verify = self._ssl_verify
         self._session.headers.update({
             "x-api-key": self._api_key,
-            "Content-Type": "application/json"
+            # "Content-Type": "application/json"
         })
 
         if not ssl_verify:
