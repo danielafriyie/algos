@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class JLox {
+public class Lox {
     static boolean hadError = false;
 
     static void error(int line, String message) {
@@ -30,7 +30,8 @@ public class JLox {
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
-        if (hadError) System.exit(65);
+        if (hadError)
+            System.exit(65);
     }
 
     private static void runPrompt() throws IOException {
@@ -39,7 +40,8 @@ public class JLox {
         for (;;) {
             System.out.print(">>> ");
             String line = reader.readLine();
-            if (line == null) break;
+            if (line == null)
+                break;
             run(line);
             hadError = false;
         }

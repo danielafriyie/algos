@@ -18,19 +18,64 @@ public class Scanner {
         return current >= source.length();
     }
 
+    private char advance() {
+        char c = source.charAt(current);
+        current++;
+        return c;
+    }
+
+    private void addToken(TokenType type, Object literal) {
+        String text = source.substring(start, current);
+        tokens.add(new Token(type, text, literal, line));
+    }
+
+    private void addToken(TokenType type) {
+        addToken(type, null);
+    }
+
+    private boolean match(char expected) {
+        if (isAtEnd())
+            return false;
+        if (source.charAt(current) != expected)
+            return false;
+        current++;
+        return true;
+    }
+
+    private char peek() {
+        if (isAtEnd())
+            return '\0';
+        return source.charAt(current);
+    }
+
     private void scanToken() {
         char c = advance();
         switch (c) {
-            case '(': addToken(LEFT_PAREN); break;
-            case ')': addToken(RIGHT_PAREN); break;
-            case '{': addToken(LEFT_BRACE); break;
-            case '}': addToken(RIGHT_BRACE); break;
-            case ',': addToken(COMMA); break;
-            case '.': addToken(DOT); break;
-            case '-': addToken(MINUS); break;
-            case '+': addToken(PLUS); break;
-            case ';': addToken(SEMICOLON); break;
-            case '*': addToken(STAR); break;
+            case '(' -> addToken(TokenType.LEFT_PAREN);
+            case ')' -> addToken(TokenType.RIGHT_PAREN);
+            case '{' -> addToken(TokenType.LEFT_BRACE);
+            case '}' -> addToken(TokenType.RIGHT_BRACE);
+            case ',' -> addToken(TokenType.COMMA);
+            case '.' -> addToken(TokenType.DOT);
+            case '-' -> addToken(TokenType.MINUS);
+            case '+' -> addToken(TokenType.PLUS);
+            case ';' -> addToken(TokenType.SEMICOLON);
+            case '*' -> addToken(TokenType.STAR);
+            case '!' -> addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+            case '=' -> addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+            case '<' -> addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+            case '>' -> addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
+            case '/' -> {
+                if (match('/')) {
+                    while ((peek() != '\n') && (!isAtEnd()))
+                        advance();
+                } else {
+                    addToken(TokenType.SLASH);
+                }
+            }
+            case ' ', '\r', '\t' -> {}
+            case '\n' -> line++;
+            default -> Lox.error(line, String.format("Unexpected character '%s'", c));
         }
     }
 
