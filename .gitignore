@@ -1,6 +1,7 @@
 bunny.py
 bunny
 env
+out
 *.xpi
 .env
 __pycache__

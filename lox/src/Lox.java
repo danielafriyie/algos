@@ -40,7 +40,7 @@ public class Lox {
         for (;;) {
             System.out.print(">>> ");
             String line = reader.readLine();
-            if (line == null)
+            if ((line == null) || (line.equalsIgnoreCase("exit")))
                 break;
             run(line);
             hadError = false;
