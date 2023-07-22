@@ -1,3 +1,5 @@
+package org.lox.token;
+
 public enum TokenType {
     // Single-character tokens.
     LEFT_PAREN,

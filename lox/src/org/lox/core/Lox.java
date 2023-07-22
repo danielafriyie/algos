@@ -1,3 +1,5 @@
+package org.lox.core;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,10 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.lox.scanner.Scanner;
+import org.lox.token.Token;
+
 public class Lox {
     static boolean hadError = false;
 
-    static void error(int line, String message) {
+    public static void error(int line, String message) {
         report(line, "", message);
     }
 
@@ -47,7 +52,7 @@ public class Lox {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void run(String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
             System.exit(64);
