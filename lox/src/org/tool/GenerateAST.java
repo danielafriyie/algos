@@ -2,43 +2,48 @@ package org.tool;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 public class GenerateAST {
-    private static final String separator = File.pathSeparator;
+    private static String packageName = "";
+    private static String imports = "";
+    private static final String separator = File.separator;
 
     private static void defineType(String outputDir, String baseName, String className, String fields)
             throws IOException {
         String path = outputDir + separator + className + ".java";
         try (PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8)) {
-            writer.println("package org.lox.expression;");
+            writer.println(packageName);
             writer.println();
-            writer.println("import java.util.List;");
+            writer.println(imports);
             writer.println();
             writer.println(String.format("public class %s extends %s {", className, baseName));
             String[] split = fields.split(",");
             for (String f : split) {
-                writer.println(String.format("    private final %s;", f));
+                writer.println(String.format("    private final %s;", f.strip()));
             }
             writer.println();
             writer.println(String.format("    public %s(%s) {", className, fields));
             for (String f : split) {
-                String name = f.split(" ")[1].strip();
-                writer.write(String.format("        this.%s = %s;", name, name));
+                String name = f.strip().split(" ")[1].strip();
+                writer.println(String.format("        this.%s = %s;", name, name));
             }
-            writer.write("    }");
+            writer.println("    }");
+            writer.println("}");
         }
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
         String path = outputDir + separator + baseName + ".java";
         try (PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8)) {
-            writer.println("package org.lox.expression;");
+            writer.println(packageName);
             writer.println();
-            writer.println("import java.util.List;");
+            writer.println(imports);
             writer.println();
             writer.println(String.format("public abstract class %s {", baseName));
             writer.println("}");
@@ -52,12 +57,28 @@ public class GenerateAST {
         }
     }
 
+    private static String input(String query, Scanner scanner) {
+        System.out.print(query);
+        String in = scanner.nextLine();
+        return in.strip();
+    }
+
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.err.println("Usage: generate_ast <output directory>");
+        Scanner scanner = new Scanner(System.in);
+        String packageInput = input("Enter package name: ", scanner);
+        String importInput = input("Enter import classes separated by (;): ", scanner);
+        String outputDir = input("Enter output dir: ", scanner);
+        if (outputDir.equals("")) {
             System.exit(64);
         }
-        String outputDir = args[0];
+
+        packageName = packageInput.strip().equals("") ? "" : packageInput.strip() + ";";
+        List<String> importList = new ArrayList<>();
+        Arrays.asList(importInput.split(";")).forEach((String s) -> {
+            importList.add(s.strip() + ";");
+        });
+        imports = String.join("\n", importList);
+
         defineAst(outputDir, "Expression", Arrays.asList(
                 "BinaryExpression : Expression left, Token operator, Expression right",
                 "GroupingExpression : Expression expression",
