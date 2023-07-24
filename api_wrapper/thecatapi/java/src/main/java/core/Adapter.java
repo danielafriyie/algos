@@ -35,8 +35,10 @@ public class Adapter {
         Response response = client.newCall(request).execute();
 
         int statusCode = response.code();
-        if ((statusCode < 200) || (statusCode >= 300))
+        if ((statusCode < 200) || (statusCode >= 300)) {
+            logger.warn(String.format("Request failed! Method: %s, url: %s", method, url));
             throw new IOException(String.format("Status code: %s", statusCode));
+        }
 
         return response;
     }
