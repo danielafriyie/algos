@@ -12,7 +12,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.MultipartBody;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import model.Model;
 import model.Breed;
