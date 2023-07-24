@@ -19,6 +19,14 @@ public class Model {
         return data;
     }
 
+    public <T> T get(String key, Class<T> cast) {
+        return cast.cast(data.get(key));
+    }
+
+    public Object get(String key) {
+        return data.get(key);
+    }
+
     @Override
     public String toString() {
         return data.toString();
