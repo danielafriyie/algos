@@ -1,6 +1,6 @@
 package core.query;
 
-public enum ImageSize {
+public enum ImageSize implements Query {
     SMALL("small"),
     MED("med"),
     FULL("full");
@@ -9,6 +9,11 @@ public enum ImageSize {
 
     ImageSize(String size) {
         this.size = size;
+    }
+
+    @Override
+    public String query() {
+        return "size=" + size;
     }
 
     public String toString() {

@@ -1,6 +1,6 @@
 package core.query;
 
-public enum Format {
+public enum Format implements Query {
     JSON("json"),
     SRC("src");
 
@@ -8,6 +8,11 @@ public enum Format {
 
     Format(String format) {
         this.format = format;
+    }
+
+    @Override
+    public String query() {
+        return "format=" + format;
     }
 
     public String toString() {

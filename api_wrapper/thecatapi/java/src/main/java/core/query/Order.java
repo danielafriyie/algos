@@ -1,6 +1,6 @@
 package core.query;
 
-public enum Order {
+public enum Order implements Query {
     ASC("ASC"),
     DESC("DESC"),
     RANDOM("RANDOM");
@@ -9,6 +9,11 @@ public enum Order {
 
     Order(String order) {
         this.order = order;
+    }
+
+    @Override
+    public String query() {
+        return "order=" + order;
     }
 
     public String toString() {
