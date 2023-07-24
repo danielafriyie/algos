@@ -1,7 +1,5 @@
 package core;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
@@ -75,14 +73,9 @@ public class Adapter {
         return request(Method.DELETE, url, payload);
     }
 
-    public static <T> T toJSON(Response response, Class<T> klass) {
+    public static <T> T toJSON(Response response, Class<T> klass) throws IOException {
         @SuppressWarnings("all")
-        String body = response.body().toString();
+        String body = response.body().string();
         return new Gson().fromJson(body, klass);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static Map<String, ?> toJSON(Response response) {
-        return toJSON(response, HashMap.class);
     }
 }
