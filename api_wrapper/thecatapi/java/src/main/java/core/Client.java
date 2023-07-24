@@ -1,13 +1,16 @@
 package core;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.File;
 import java.io.IOException;
 
-import okhttp3.Response;
 import okhttp3.HttpUrl;
+import okhttp3.Response;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.MultipartBody;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -102,9 +105,26 @@ public class Client {
         return imageSearch(new ImageSearchQueryBuilder());
     }
 
-    public static void main(String[] args) throws Exception {
-        var client = new Client();
-        var value = client.imageSearch();
-        System.out.println(value);
+    public Image imageUpload(String image, String subID) throws IllegalAccessException, IOException {
+        if (adapter.getApiKey().equals(""))
+            throw new IllegalAccessException("API Key not set!");
+
+        String url = Route.fullURL("images/upload");
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", image, RequestBody.create(new File(image), MediaType.parse("image/png")));
+        if (subID != null) {
+            builder.addFormDataPart("sub_id", subID);
+        }
+
+        try (Response response = adapter.post(url, builder.build())) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> data = Adapter.toJSON(response, Map.class);
+            return new Image(String.valueOf(data.get("id")), new ArrayList<>(), new ArrayList<>(), data);
+        }
+    }
+
+    public Image imageUpload(String image) throws IllegalAccessException, IOException {
+        return imageUpload(image, null);
     }
 }

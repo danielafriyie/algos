@@ -36,7 +36,9 @@ public class Adapter {
 
         int statusCode = response.code();
         if ((statusCode < 200) || (statusCode >= 300)) {
-            logger.warn(String.format("Request failed! Method: %s, url: %s", method, url));
+            @SuppressWarnings("all")
+            String body = response.body().string();
+            logger.warn(String.format("Request failed! Method: %s, url: %s, body: %s", method, url, body));
             throw new IOException(String.format("Status code: %s", statusCode));
         }
 
@@ -73,6 +75,10 @@ public class Adapter {
 
     public Response delete(String url, RequestBody payload) throws IOException {
         return request(Method.DELETE, url, payload);
+    }
+
+    public String getApiKey() {
+        return apiKey;
     }
 
     public static <T> T toJSON(Response response, Class<T> klass) throws IOException {
