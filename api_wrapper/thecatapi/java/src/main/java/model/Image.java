@@ -11,7 +11,7 @@ public class Image extends Model {
     private final List<Breed> breeds;
     private final List<Category> categories;
 
-    public Image(int id, List<Breed> breeds, List<Category> categories, Map<String, Object> data) {
+    public Image(String id, List<Breed> breeds, List<Category> categories, Map<String, Object> data) {
         super(id, data);
         this.url = String.valueOf(data.get("url"));
         this.mimeType = String.valueOf(data.get("mime_type"));

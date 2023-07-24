@@ -10,7 +10,7 @@ public class Breed extends Model {
     private final String bredFor;
     private final String breedGroup;
 
-    public Breed(int id, Map<String, Object> data) {
+    public Breed(String id, Map<String, Object> data) {
         super(id, data);
         this.name = String.valueOf(data.get("name"));
         this.weight = String.valueOf(data.get("weight"));
