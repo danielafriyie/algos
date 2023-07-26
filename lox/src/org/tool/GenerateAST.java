@@ -25,15 +25,35 @@ public class GenerateAST {
             writer.println(String.format("public class %s extends %s {", className, baseName));
             String[] split = fields.split(",");
             for (String f : split) {
-                writer.println(String.format("    private final %s;", f.strip()));
+                writer.println(String.format("    private final %s;", f.strip()));  // fields
             }
             writer.println();
-            writer.println(String.format("    public %s(%s) {", className, fields));
+            writer.println(String.format("    public %s(%s) {", className, fields));  // constructor
             for (String f : split) {
                 String name = f.strip().split(" ")[1].strip();
                 writer.println(String.format("        this.%s = %s;", name, name));
             }
             writer.println("    }");
+            writer.println();
+            writer.println("    @Override");
+            writer.println("    public <R> R accept(Visitor<R> visitor) {");  // override visitor method
+            writer.println(String.format("        return visitor.visit%s(this);", className));
+            writer.println("    }");
+            writer.println("}");
+        }
+    }
+
+    private static void defineVisitor(String outputDir, List<String> methods)
+            throws IOException {
+        String path = outputDir + separator + "Visitor" + ".java";
+        try (PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8)) {
+            writer.println(packageName);
+            writer.println();
+            writer.println(imports);
+            writer.println();
+            writer.println("public interface Visitor<R> {");
+            writer.println();
+            writer.println(String.join("\n\n", methods));
             writer.println("}");
         }
     }
@@ -46,15 +66,22 @@ public class GenerateAST {
             writer.println(imports);
             writer.println();
             writer.println(String.format("public abstract class %s {", baseName));
+            writer.println();
+            writer.println("    public abstract <R> R accept(Visitor<R> visitor);");  // abstract method (accept)
+            writer.println();
             writer.println("}");
         }
 
+        List<String> visitorMethods = new ArrayList<>();
         for (String type : types) {
             String[] split = type.split(":");
             String className = split[0].strip();
             String fields = split[1].strip();
             defineType(outputDir, baseName, className, fields);
+            visitorMethods.add(String.format("    R visit%s(%s %s);", className, className, baseName.toLowerCase()));
         }
+
+        defineVisitor(outputDir, visitorMethods);
     }
 
     private static String input(String query, Scanner scanner) {
@@ -64,20 +91,9 @@ public class GenerateAST {
     }
 
     public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        String packageInput = input("Enter package name: ", scanner);
-        String importInput = input("Enter import classes separated by (;): ", scanner);
-        String outputDir = input("Enter output dir: ", scanner);
-        if (outputDir.equals("")) {
-            System.exit(64);
-        }
-
-        packageName = packageInput.strip().equals("") ? "" : packageInput.strip() + ";";
-        List<String> importList = new ArrayList<>();
-        Arrays.asList(importInput.split(";")).forEach((String s) -> {
-            importList.add(s.strip() + ";");
-        });
-        imports = String.join("\n", importList);
+        String outputDir = "C:\\Users\\afriy\\Desktop\\PROJECTS\\algos\\lox\\src\\org\\lox\\expression";
+        packageName = "package org.lox.expression;";
+        imports = "import org.lox.token.Token;";
 
         defineAst(outputDir, "Expression", Arrays.asList(
                 "BinaryExpression : Expression left, Token operator, Expression right",
