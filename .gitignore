@@ -3,6 +3,7 @@ bunny
 bunny.*
 env
 out
+*.iml
 *.xpi
 .env
 __pycache__
