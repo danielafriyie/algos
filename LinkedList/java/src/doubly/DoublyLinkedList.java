@@ -51,6 +51,10 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
         return size;
     }
 
+    public boolean isEmpty() {
+        return size < 1;
+    }
+
     public void append(Node<E> node) {
         setTail(node);
         increaseSize();
