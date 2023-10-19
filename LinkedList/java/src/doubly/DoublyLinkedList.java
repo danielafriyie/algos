@@ -100,4 +100,20 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
             return n;
         }
     }
+
+    public static void main(String[] args) {
+        DoublyLinkedList<Integer> lst = new DoublyLinkedList<>();
+        lst.append(2);
+        lst.append(4);
+        lst.append(2);
+        lst.prepend(46);
+        System.out.println(lst.size());
+        System.out.println(lst.getHead());
+        System.out.println(lst.getTail());
+
+        System.out.println("\nLooping...\n");
+        for (var n : lst) {
+            System.out.println(n);
+        }
+    }
 }
