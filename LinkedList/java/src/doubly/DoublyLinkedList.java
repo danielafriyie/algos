@@ -79,7 +79,7 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
         if (next != null) {
             next.setPrevious(previous);
         } else if (previous != null) {
-            previous.setNext(next);
+            previous.setNext(null);
         }
         size--;
     }
