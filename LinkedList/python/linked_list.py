@@ -70,9 +70,8 @@ class DoublyLinkedList:
 
     @head.setter
     def head(self, node: Node) -> None:
-        if node is None:
-            return
-        node.next = self._head
+        if self._head is not None:
+            self._head.previous = node
         self._head = node
 
     @property
@@ -81,9 +80,8 @@ class DoublyLinkedList:
 
     @tail.setter
     def tail(self, node: Node) -> None:
-        if node is None:
-            return
-        node.previous = self._tail
+        if self._tail is not None:
+            self._tail.next = node
         self._tail = node
 
     @property
