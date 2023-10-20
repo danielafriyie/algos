@@ -81,6 +81,8 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
         } else if (previous != null) {
             previous.setNext(null);
         }
+        node.setNext(null);
+        node.setPrevious(null);
         size--;
     }
 

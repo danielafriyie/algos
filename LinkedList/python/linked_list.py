@@ -109,6 +109,8 @@ class DoublyLinkedList:
             next_.previous = previous
         elif previous is not None:
             previous.next = None
+        node.next = None
+        node.previous = None
         self._size -= 1
 
     def __iter__(self) -> "DoublyLinkedList":
