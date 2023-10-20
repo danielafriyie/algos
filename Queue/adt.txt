@@ -1,0 +1,6 @@
+Stack:
+    enqueue(element): adds element to the bottom of the queue
+    dequeue(): removes and returns the top element from the queue or null if empty
+    first(): returns the first element of the queue or null
+    size(): returns the number of elements in the queue
+    isEmpty(): returns boolean indicating whether the queue is empty
