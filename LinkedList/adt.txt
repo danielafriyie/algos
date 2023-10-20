@@ -1,0 +1,18 @@
+Node:
+    getElement(): returns the element
+    setElement(element): sets the element
+    getNext(): returns next node or null
+    setNext(node): sets next node
+    getPrevious(): returns previous node or null
+    setPrevious(node): sets previous node
+
+
+LinkedList:
+    setHead(node): sets the head node
+    getHead(): returns the head node
+    setTail(node): sets the tail node
+    getTail(): returns the tail node
+    size(): returns the number of elements in the list
+    isEmpty(): boolean indicating whether the list is empty
+    append(node): adds a node to the bottom of the list (tail)
+    prepend(node): adds a node to the top of the list (head)
