@@ -21,10 +21,6 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
         this(null);
     }
 
-    private void increaseSize() {
-        size++;
-    }
-
     public void setHead(Node<E> node) {
         if (head != null) {
             head.setPrevious(node);
@@ -57,9 +53,9 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
 
     public void append(Node<E> node) {
         setTail(node);
-        increaseSize();
         if (head == null)
             setHead(node);
+        size++;
     }
 
     public void append(E element) {
@@ -68,13 +64,24 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
 
     public void prepend(Node<E> node) {
         setHead(node);
-        increaseSize();
         if (tail == null)
             setTail(node);
+        size++;
     }
 
     public void prepend(E element) {
         prepend(new Node<>(element));
+    }
+
+    public void remove(Node<E> node) {
+        Node<E> next = node.getNext();
+        Node<E> previous = node.getPrevious();
+        if (next != null) {
+            next.setPrevious(previous);
+        } else if (previous != null) {
+            previous.setNext(next);
+        }
+        size--;
     }
 
     @Override

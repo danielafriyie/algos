@@ -16,3 +16,4 @@ LinkedList:
     isEmpty(): boolean indicating whether the list is empty
     append(node): adds a node to the bottom of the list (tail)
     prepend(node): adds a node to the top of the list (head)
+    remove(node): remove a node from the list

@@ -60,9 +60,6 @@ class DoublyLinkedList:
         self._size = 0
         self._next: typing.Union[Node, None] = None
 
-    def _increase_size(self) -> None:
-        self._size += 1
-
     @property
     def size(self) -> int:
         return self._size
@@ -97,13 +94,22 @@ class DoublyLinkedList:
         self.tail = node
         if self._head is None:
             self.head = node
-        self._increase_size()
+        self._size += 1
 
     def prepend(self, node: Node) -> None:
         self.head = node
         if self._tail is None:
             self.tail = node
-        self._increase_size()
+        self._size += 1
+
+    def remove(self, node: Node) -> None:
+        next_ = node.next
+        previous = node.previous
+        if next_ is not None:
+            next_.previous = previous
+        elif previous is not None:
+            previous.next = None
+        self._size -= 1
 
     def __iter__(self) -> "DoublyLinkedList":
         self._next = self._head
