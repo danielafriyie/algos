@@ -7,7 +7,9 @@ public class BinarySearch {
         if (length == 0)
             return false;
         else if (length == 1)
-            return array[0] == target;
+            return array[0].compareTo(target) == 0;
+        else if (length == 2)
+            return array[0].compareTo(target) == 0 || array[1].compareTo(target) == 0;
         int mid = length / 2;
         E midValue = array[mid];
         int result = midValue.compareTo(target);
@@ -19,8 +21,8 @@ public class BinarySearch {
     }
 
     public static void main(String[] args) {
+        System.out.println(binarySearch(new Integer[]{1, 2}, 1));
         System.out.println(binarySearch(new Integer[]{1, 2, 3, 4, 6}, 3));
-        System.out.println(binarySearch(new Double[]{1.6, 2.5, 43.78, 54.0, 99.983}, 2.5));
         System.out.println(binarySearch(new Double[]{1.6, 2.5, 43.78, 54.0, 99.983}, 2.556));
         System.out.println(binarySearch(new Character[]{'a', 'b', 'c', 'd', 'e', 'f'}, 'c'));
     }
