@@ -1,0 +1,9 @@
+DoubleEndedQueue:
+    addFirst(e): Insert a new element e at the front of the deque.
+    addLast(e): Insert a new element e at the back of the deque.
+    removeFirst(): Remove and return the first element of the deque (or null if the deque is empty).
+    removeLast(): Remove and return the last element of the deque (or null if the deque is empty).
+    first(): Returns the first element of the deque, without removing it (or null if the deque is empty).
+    last(): Returns the last element of the deque, without removing it (or null if the deque is empty).
+    size(): Returns the number of elements in the deque.
+    isEmpty(): Returns a boolean indicating whether the deque is empty.
