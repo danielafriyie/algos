@@ -30,9 +30,9 @@ public class Node<E> {
     }
 
     public void setNext(Node<E> node) {
+        this.next = node;
         if (node == null)
             return;
-        this.next = node;
         node.previous = this;
     }
 
@@ -41,9 +41,9 @@ public class Node<E> {
     }
 
     public void setPrevious(Node<E> node) {
+        this.previous = node;
         if (node == null)
             return;
-        this.previous = node;
         node.next = this;
     }
 

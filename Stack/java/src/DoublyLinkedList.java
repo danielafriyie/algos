@@ -1,5 +1,3 @@
-import doubly.Node;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -77,6 +75,16 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
         prepend(new Node<>(element));
     }
 
+    public void remove(Node<E> node) {
+        Node<E> next = node.getNext();
+        Node<E> previous = node.getPrevious();
+        if (next != null) {
+            next.setPrevious(previous);
+        } else if (previous != null) {
+            previous.setNext(next);
+        }
+    }
+
     @Override
     public Iterator<Node<E>> iterator() {
         return new DoublyLinkedListIterator();
@@ -102,22 +110,6 @@ public class DoublyLinkedList<E> implements Iterable<Node<E>>{
             Node<E> n = next;
             this.next = n.getNext();
             return n;
-        }
-    }
-
-    public static void main(String[] args) {
-        DoublyLinkedList<Integer> lst = new DoublyLinkedList<>();
-        lst.append(2);
-        lst.append(4);
-        lst.append(2);
-        lst.prepend(46);
-        System.out.println(lst.size());
-        System.out.println(lst.getHead());
-        System.out.println(lst.getTail());
-
-        System.out.println("\nLooping...\n");
-        for (var n : lst) {
-            System.out.println(n);
         }
     }
 }
