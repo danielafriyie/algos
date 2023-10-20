@@ -5,9 +5,10 @@ public class Stack<E> {
         Node<E> head = list.getHead();
         if (head == null)
             return null;
-        list.setHead(head.getNext());
-        if (list.getHead() != null)
-            list.getHead().setPrevious(null);
+        Node<E> next = head.getNext();
+        list.remove(head);
+        list.setHead(null);
+        list.setHead(next);
         return head.getElement();
     }
 
