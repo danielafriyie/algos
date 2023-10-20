@@ -6,3 +6,4 @@
 # List of Algorithms
 - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py))
 - Doubly Linked List ([java](LinkedList/java/src/doubly/DoublyLinkedList.java))
+- Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
