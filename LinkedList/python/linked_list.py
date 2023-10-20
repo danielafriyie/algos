@@ -124,6 +124,7 @@ if __name__ == "__main__":
     lst.append(Node(3))
     lst.append(Node(5))
     lst.prepend(Node(0))
+    print(lst.size)
     print(lst.head)
     print(lst.tail)
     for n in lst:
