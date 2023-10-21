@@ -1,4 +1,4 @@
-public class DoubleEndedQueue<E> {
+public class Deque<E> {
     private final DoublyLinkedList<E> list = new DoublyLinkedList<>();
 
     public E first() {
@@ -52,7 +52,7 @@ public class DoubleEndedQueue<E> {
     }
 
     public static void main(String[] args) {
-        DoubleEndedQueue<Integer> queue = new DoubleEndedQueue<>();
+        Deque<Integer> queue = new Deque<>();
         queue.addFirst(2);
         queue.addLast(3);
         queue.addFirst(4);

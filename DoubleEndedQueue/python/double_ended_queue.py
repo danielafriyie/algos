@@ -123,7 +123,7 @@ class DoublyLinkedList:
         return n
 
 
-class DoubleEndedQueue:
+class Deque:
 
     def __init__(self) -> None:
         self._list = DoublyLinkedList()
@@ -173,7 +173,7 @@ class DoubleEndedQueue:
         self._list.tail = previous
         return tail.element
 
-    def __iter__(self) -> "DoubleEndedQueue":
+    def __iter__(self) -> "Deque":
         self._iterator = iter(self._list)
         return self
 
@@ -182,7 +182,7 @@ class DoubleEndedQueue:
 
 
 if __name__ == "__main__":
-    queue = DoubleEndedQueue()
+    queue = Deque()
     queue.add_first(1)
     queue.add_last(2)
     queue.add_first(3)
