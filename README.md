@@ -8,7 +8,7 @@
   - Doubly Linked List ([java](LinkedList/java/src/doubly/DoublyLinkedList.java), [python](LinkedList/python/linked_list.py))
   - Stack ([java](Stack/java/src/Stack.java), [python](Stack/python/stack.py))
   - Queue ([java](Queue/java/src/Queue.java), [python](Queue/python/queue.py))
-  - Double Ended Queue ([java](DoubleEndedQueue/java/src/DoubleEndedQueue.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
+  - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
 - Algorithms
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
