@@ -9,6 +9,7 @@
   - Stack ([java](Stack/java/src/Stack.java), [python](Stack/python/stack.py))
   - Queue ([java](Queue/java/src/Queue.java), [python](Queue/python/queue.py))
   - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
+  - Array List ([java](ArrayList/java/src/ArrayList.java), [python](ArrayList/python/array_list.py))
 - Algorithms
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
