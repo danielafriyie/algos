@@ -58,8 +58,8 @@ public class ArrayList<E> {
     private void shrink() {
         int n = (int) (shrink_factor * array.length);
         if (size < n) {
-            resize(n);
             this.capacity = n;
+            resize(capacity);
         }
     }
 
@@ -136,9 +136,11 @@ public class ArrayList<E> {
         for (int i = 0; i < 50; i++) {
             array.add(i + 3);
         }
+        System.out.println(array);
         for (int i = 0; i < 50; i++) {
             array.remove(0);
         }
         System.out.println(array);
+        System.out.println(array.size());
     }
 }
