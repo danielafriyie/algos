@@ -5,6 +5,8 @@ BinaryTree:
     addRight(parent, child): adds the child node to the right of the parent node, an error is thrown if the right already has a node
     remove(node): removes the node and all of its descendants
     isEmpty(): returns a boolean indicating whether the tree is empty
+    isRoot(node): returns a boolean indicating whether the node is the root node
+    isLeaf(node): returns a boolean indicating whether the node has no children
     depth(): returns the depth of the tree (number of layers)
     depth(node): returns the depth of the node
     size(): returns the total number of nodes in the tree, including the root node
