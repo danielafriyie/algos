@@ -18,6 +18,7 @@ class Node(typing.Generic[E]):
         self._parent = parent
         self._left = left
         self._right = right
+        self._layer = 0
 
     @property
     def element(self) -> E:
@@ -49,22 +50,41 @@ class Node(typing.Generic[E]):
 
     @right.setter
     def right(self, node: "Node") -> None:
+        if self._left is None:
+            raise ValueError("Left is empty!")
         self._right = node
+
+    def children(self) -> list["Node"]:
+        output = []
+        if self._left:
+            output.append(self._left)
+            if self._right:
+                output.append(self._right)
+        return output
+
+    def has_children(self) -> bool:
+        return len(self.children()) > 0
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self._element})"
 
 
 class BinaryTree(typing.Generic[E]):
 
-    def __init__(self, root: typing.Optional[Node] = None) -> None:
-        self._root = root
-        self._depth = 0 if root is None else 1
-        self._height = 0 if root is None else 1
+    def __init__(self) -> None:
+        self._root = None
+        self._height = 0
 
     @property
     def depth(self) -> int:
-        return self._depth
+        return len(self.get_layers())
 
     @property
     def height(self) -> int:
+        return self._height
+
+    @property
+    def size(self) -> int:
         return self._height
 
     @property
@@ -80,6 +100,7 @@ class BinaryTree(typing.Generic[E]):
         if self._root is not None:
             raise ValueError("Tree is not empty!")
         self._root = node
+        self._height += 1
 
     def _validate(self, node: Node) -> None:
         if node.tree != self:
@@ -91,6 +112,7 @@ class BinaryTree(typing.Generic[E]):
             raise ValueError("Parents left is not empty!")
         node = Node(element, self, parent)
         parent.left = node
+        self._height += 1
         return node
 
     def add_right(self, parent: Node, element: E) -> Node:
@@ -99,16 +121,51 @@ class BinaryTree(typing.Generic[E]):
             raise ValueError("Parents right is not empty!")
         node = Node(element, self, parent)
         parent.right = node
+        self._height += 1
         return node
-
-    def remove(self, node: Node) -> None:
-        self._validate(node)
-        node.parent = None
 
     def is_root(self, node: Node) -> bool:
         return (node == self._root) and (self._root is not None)
 
     @staticmethod
     def is_leaf(node: Node) -> bool:
-        return (node.left is None) and (node.right is None)
+        return not node.has_children()
 
+    def get_layers(self) -> list[list[Node]]:
+        if self.empty:
+            return []
+        elif self.is_leaf(self._root):
+            return [[self._root]]
+        output = [[self._root]]
+        children = self._root.children()
+        while len(children) > 0:
+            output.append(children)
+            children_temp = []
+            for c in children:
+                children_temp.extend(c.children())
+
+            children = children_temp
+
+        return output
+
+    def breath_first_traversal(self) -> list[Node]:
+        layers = self.get_layers()
+        return [node for lst in layers for node in lst]
+
+    def __iter__(self) -> typing.Iterator[Node]:
+        return iter(self.breath_first_traversal())
+
+
+if __name__ == "__main__":
+    btree = BinaryTree()
+    root = Node(0, btree)
+    btree.root = root
+    btree.add_left(root, 1)
+    btree.add_right(root, 2)
+    btree.add_left(root.left, 3)
+    btree.add_right(root.left, 4)
+    btree.add_left(root.right, 5)
+    btree.add_right(root.right, 6)
+    print(btree.depth)
+    print(btree.size)
+    print(btree)
