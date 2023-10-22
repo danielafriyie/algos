@@ -1,12 +1,12 @@
 import typing
 
-T = typing.TypeVar("T")
+E = typing.TypeVar("E")
 
 
-class Node:
+class Node(typing.Generic[E]):
 
     def __init__(
-            self, element: T,
+            self, element: E,
             next_: typing.Optional["Node"] = None,
             previous: typing.Optional["Node"] = None
     ) -> None:
@@ -35,11 +35,11 @@ class Node:
             node._next = self
 
     @property
-    def element(self) -> T:
+    def element(self) -> E:
         return self._element
 
     @element.setter
-    def element(self, element: T) -> None:
+    def element(self, element: E) -> None:
         self._element = element
 
     def __repr__(self) -> str:
@@ -48,7 +48,7 @@ class Node:
                 f"previous={self._previous._element if self._previous else None})")
 
 
-class DoublyLinkedList:
+class DoublyLinkedList(typing.Generic[E]):
 
     def __init__(
             self,
@@ -123,11 +123,11 @@ class DoublyLinkedList:
         return n
 
 
-class Stack:
+class Stack(typing.Generic[E]):
 
     def __init__(self) -> None:
-        self._list = DoublyLinkedList()
-        self._iterator: typing.Union[DoublyLinkedList, None] = None
+        self._list: DoublyLinkedList[E] = DoublyLinkedList()
+        self._iterator: typing.Union[DoublyLinkedList[E], None] = None
 
     @property
     def size(self) -> int:
@@ -137,7 +137,7 @@ class Stack:
     def empty(self) -> bool:
         return self._list.empty
 
-    def pop(self) -> T:
+    def pop(self) -> E:
         head = self._list.head
         if head is None:
             return None
@@ -147,23 +147,23 @@ class Stack:
         self._list.head = next_
         return head.element
 
-    def top(self) -> T:
+    def top(self) -> E:
         head = self._list.head
         return head.element if head is not None else None
 
-    def push(self, element: T) -> None:
+    def push(self, element: E) -> None:
         self._list.prepend(Node(element))
 
     def __iter__(self) -> "Stack":
         self._iterator = iter(self._list)
         return self
 
-    def __next__(self) -> T:
+    def __next__(self) -> E:
         return next(self._iterator).element
 
 
 if __name__ == "__main__":
-    stack = Stack()
+    stack: Stack[int] = Stack()
     stack.push(1)
     stack.push(2)
     stack.push(3)

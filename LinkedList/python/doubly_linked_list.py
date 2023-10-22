@@ -1,12 +1,12 @@
 import typing
 
-T = typing.TypeVar("T")
+E = typing.TypeVar("E")
 
 
-class Node:
+class Node(typing.Generic[E]):
 
     def __init__(
-            self, element: T,
+            self, element: E,
             next_: typing.Optional["Node"] = None,
             previous: typing.Optional["Node"] = None
     ) -> None:
@@ -35,11 +35,11 @@ class Node:
             node._next = self
 
     @property
-    def element(self) -> T:
+    def element(self) -> E:
         return self._element
 
     @element.setter
-    def element(self, element: T) -> None:
+    def element(self, element: E) -> None:
         self._element = element
 
     def __repr__(self) -> str:
@@ -48,7 +48,7 @@ class Node:
                 f"previous={self._previous._element if self._previous else None})")
 
 
-class DoublyLinkedList:
+class DoublyLinkedList(typing.Generic[E]):
 
     def __init__(
             self,
@@ -124,7 +124,7 @@ class DoublyLinkedList:
 
 
 if __name__ == "__main__":
-    lst = DoublyLinkedList()
+    lst: DoublyLinkedList[int] = DoublyLinkedList()
     lst.append(Node(1))
     lst.append(Node(2))
     lst.append(Node(3))
