@@ -182,7 +182,7 @@ class Deque(typing.Generic[E]):
 
 
 if __name__ == "__main__":
-    queue: Deque[E] = Deque()
+    queue: Deque[int] = Deque()
     queue.add_first(1)
     queue.add_last(2)
     queue.add_first(3)
