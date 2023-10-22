@@ -1,6 +1,6 @@
 BinaryTree:
     setRoot(node): sets the node as the root of the tree, an error is thrown if the tree is not empty
-    getRoot(): returns the root node
+    getRoot(): returns the root node or null if the tree is empty
     addLeft(parent, child): adds the child node to the left of the parent node, an error is thrown if the left already has a node
     addRight(parent, child): adds the child node to the right of the parent node, an error is thrown if the right already has a node
     remove(node): removes the node and all of its descendants
