@@ -9,4 +9,4 @@ BinaryTree:
     isLeaf(node): returns a boolean indicating whether the node has no children
     depth(): returns the depth of the tree (number of layers)
     depth(node): returns the depth of the node
-    size(): returns the total number of nodes in the tree, including the root node
+    height(): returns the total number of nodes in the tree, including the root node
