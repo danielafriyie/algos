@@ -1,0 +1,10 @@
+BinaryTree:
+    setRoot(node): sets the node as the root of the tree, an error is thrown if the tree is not empty
+    getRoot(): returns the root node
+    addLeft(parent, child): adds the child node to the left of the parent node, an error is thrown if the left already has a node
+    addRight(parent, child): adds the child node to the right of the parent node, an error is thrown if the right already has a node
+    remove(node): removes the node and all of its descendants
+    isEmpty(): returns a boolean indicating whether the tree is empty
+    depth(): returns the depth of the tree (number of layers)
+    depth(node): returns the depth of the node
+    size(): returns the total number of nodes in the tree, including the root node
