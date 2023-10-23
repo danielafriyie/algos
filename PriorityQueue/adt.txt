@@ -1,0 +1,6 @@
+PriorityQueue:
+    insert(k, v): Creates an entry with key k and value v in the priority queue.
+    min(): Returns (but does not remove) a priority queue entry (k,v) having minimal key; returns null if the priority queue is empty.
+    removeMin(): Removes and returns an entry (k,v) having minimal key from the priority queue; returns null if the priority queue is empty.
+    size(): Returns the number of entries in the priority queue.
+    isEmpty(): Returns a boolean indicating whether the priority queue is empty.
