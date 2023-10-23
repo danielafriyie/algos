@@ -158,22 +158,16 @@ class BinaryTree(typing.Generic[E]):
 
         return output
 
-    def preorder_traversal(
-            self,
-            node: typing.Optional[Node] = None,
-            output: typing.Optional[list[Node]] = None
-    ) -> list[Node]:
+    def preorder_traversal(self, node: typing.Optional[Node] = None) -> list[Node]:
         if self.empty:
             return []
         if node is None:
             node = self._root
-        if output is None:
-            output = [node]
+        output = [node]
 
         children = node.children()
         for child in children:
-            output.append(child)
-            self.preorder_traversal(child, output)
+            output.extend(self.preorder_traversal(child))
 
         return output
 
@@ -186,7 +180,7 @@ class BinaryTree(typing.Generic[E]):
 
 
 if __name__ == "__main__":
-    btree = BinaryTree()
+    btree: BinaryTree[int] = BinaryTree()
     root = Node(0, btree)
     btree.root = root
     btree.add_left(root, 1)
