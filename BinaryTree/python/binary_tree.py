@@ -158,6 +158,25 @@ class BinaryTree(typing.Generic[E]):
 
         return output
 
+    def preorder_traversal(
+            self,
+            node: typing.Optional[Node] = None,
+            output: typing.Optional[list[Node]] = None
+    ) -> list[Node]:
+        if self.empty:
+            return []
+        if node is None:
+            node = self._root
+        if output is None:
+            output = [node]
+
+        children = node.children()
+        for child in children:
+            output.append(child)
+            self.preorder_traversal(child, output)
+
+        return output
+
     def breath_first_traversal(self) -> list[Node]:
         layers = self.get_layers()
         return [node for lst in layers for node in lst]
@@ -172,10 +191,15 @@ if __name__ == "__main__":
     btree.root = root
     btree.add_left(root, 1)
     btree.add_right(root, 2)
+
     btree.add_left(root.left, 3)
     btree.add_right(root.left, 4)
+
     btree.add_left(root.right, 5)
     btree.add_right(root.right, 6)
+
+    btree.add_left(root.left.left, 7)
     print(btree.depth)
     print(btree.size)
-    print(btree)
+    print(btree.preorder_traversal())
+    print(btree.breath_first_traversal())
