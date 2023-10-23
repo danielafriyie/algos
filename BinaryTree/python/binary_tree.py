@@ -9,9 +9,9 @@ class Node(typing.Generic[E]):
             self,
             element: E,
             tree: typing.Optional["BinaryTree"] = None,
-            parent: typing.Optional["Node"] = None,
-            left: typing.Optional["Node"] = None,
-            right: typing.Optional["Node"] = None,
+            parent: typing.Optional["Node[E]"] = None,
+            left: typing.Optional["Node[E]"] = None,
+            right: typing.Optional["Node[E]"] = None,
     ) -> None:
         self._element = element
         self._tree = tree
@@ -34,38 +34,38 @@ class Node(typing.Generic[E]):
         self._tree = tree
 
     @property
-    def parent(self) -> typing.Union["Node", None]:
+    def parent(self) -> typing.Union["Node[E]", None]:
         return self._parent
 
     @parent.setter
-    def parent(self, node: "Node") -> None:
+    def parent(self, node: "Node[E]") -> None:
         if self._parent:
             raise ValueError("Parent is not empty!")
         self._parent = node
 
     @property
-    def left(self) -> typing.Union["Node", None]:
+    def left(self) -> typing.Union["Node[E]", None]:
         return self._left
 
     @left.setter
-    def left(self, node: "Node") -> None:
+    def left(self, node: "Node[E]") -> None:
         if self._left:
             raise ValueError("Left is not empty!")
         self._left = node
 
     @property
-    def right(self) -> typing.Union["Node", None]:
+    def right(self) -> typing.Union["Node[E]", None]:
         return self._right
 
     @right.setter
-    def right(self, node: "Node") -> None:
+    def right(self, node: "Node[E]") -> None:
         if self._right:
             raise ValueError("Right is not empty!")
         if self._left is None:
             raise ValueError("Left is empty!")
         self._right = node
 
-    def children(self) -> list["Node"]:
+    def children(self) -> list["Node[E]"]:
         output = []
         if self._left:
             output.append(self._left)
@@ -82,7 +82,7 @@ class Node(typing.Generic[E]):
 
 class BinaryTree(typing.Generic[E]):
 
-    def __init__(self, root: typing.Optional[Node] = None) -> None:
+    def __init__(self, root: typing.Optional[Node[E]] = None) -> None:
         if root is not None:
             root.tree = self
         self._root = root
@@ -105,7 +105,7 @@ class BinaryTree(typing.Generic[E]):
         return self._root is None
 
     @property
-    def root(self) -> typing.Union[Node, None]:
+    def root(self) -> typing.Union[Node[E], None]:
         return self._root
 
     @root.setter
@@ -114,11 +114,11 @@ class BinaryTree(typing.Generic[E]):
             raise ValueError("Tree is not empty!")
         self._root = node
 
-    def _validate(self, node: Node) -> None:
+    def _validate(self, node: Node[E]) -> None:
         if node.tree != self:
             raise ValueError("Node does not belong to this tree!")
 
-    def add_left(self, parent: Node, element: E) -> Node:
+    def add_left(self, parent: Node[E], element: E) -> Node[E]:
         self._validate(parent)
         if parent.left is not None:
             raise ValueError("Parents left is not empty!")
@@ -126,7 +126,7 @@ class BinaryTree(typing.Generic[E]):
         parent.left = node
         return node
 
-    def add_right(self, parent: Node, element: E) -> Node:
+    def add_right(self, parent: Node[E], element: E) -> Node[E]:
         self._validate(parent)
         if parent.right is not None:
             raise ValueError("Parents right is not empty!")
@@ -134,14 +134,14 @@ class BinaryTree(typing.Generic[E]):
         parent.right = node
         return node
 
-    def is_root(self, node: Node) -> bool:
+    def is_root(self, node: Node[E]) -> bool:
         return (node == self._root) and (self._root is not None)
 
     @staticmethod
-    def is_leaf(node: Node) -> bool:
+    def is_leaf(node: Node[E]) -> bool:
         return not node.has_children()
 
-    def get_layers(self) -> list[list[Node]]:
+    def get_layers(self) -> list[list[Node[E]]]:
         if self.empty:
             return []
         elif self.is_leaf(self._root):
@@ -158,13 +158,11 @@ class BinaryTree(typing.Generic[E]):
 
         return output
 
-    def inorder_traversal(self, node: typing.Optional[Node] = None) -> list[Node]:
+    def inorder_traversal(self, node: typing.Optional[Node[E]] = None) -> list[Node[E]]:
         if self.empty:
             return []
         if node is None:
             node = self._root
-        if self.is_leaf(node):
-            return [node]
         output = []
         if node.left:
             output.extend(self.postorder_traversal(node.left))
@@ -173,7 +171,7 @@ class BinaryTree(typing.Generic[E]):
             output.extend(self.postorder_traversal(node.right))
         return output
 
-    def preorder_traversal(self, node: typing.Optional[Node] = None) -> list[Node]:
+    def preorder_traversal(self, node: typing.Optional[Node[E]] = None) -> list[Node[E]]:
         if self.empty:
             return []
         if node is None:
@@ -186,7 +184,7 @@ class BinaryTree(typing.Generic[E]):
 
         return output
 
-    def postorder_traversal(self, node: typing.Optional[Node] = None) -> list[Node]:
+    def postorder_traversal(self, node: typing.Optional[Node[E]] = None) -> list[Node[E]]:
         if self.empty:
             return []
         if node is None:
@@ -201,11 +199,11 @@ class BinaryTree(typing.Generic[E]):
         output.append(node)
         return output
 
-    def breath_first_traversal(self) -> list[Node]:
+    def breath_first_traversal(self) -> list[Node[E]]:
         layers = self.get_layers()
         return [node for lst in layers for node in lst]
 
-    def visualize(self, node: typing.Optional[Node] = None, level: typing.Optional[int] = 0) -> None:
+    def visualize(self, node: typing.Optional[Node[E]] = None, level: typing.Optional[int] = 0) -> None:
         if self.empty:
             return
         if node is None:
@@ -216,24 +214,22 @@ class BinaryTree(typing.Generic[E]):
         if node.left:
             self.visualize(node.left, level + 2)
 
-    def __iter__(self) -> typing.Iterator[Node]:
+    def __iter__(self) -> typing.Iterator[Node[E]]:
         return iter(self.breath_first_traversal())
 
 
 if __name__ == "__main__":
-    btree: BinaryTree[int] = BinaryTree()
-    root = Node(0, btree)
-    btree.root = root
-    btree.add_left(root, 1)
-    btree.add_right(root, 2)
+    btree: BinaryTree[int] = BinaryTree(Node(0))
+    btree.add_left(btree.root, 1)
+    btree.add_right(btree.root, 2)
 
-    btree.add_left(root.left, 3)
-    btree.add_right(root.left, 4)
+    btree.add_left(btree.root.left, 3)
+    btree.add_right(btree.root.left, 4)
 
-    btree.add_left(root.right, 5)
-    btree.add_right(root.right, 6)
+    btree.add_left(btree.root.right, 5)
+    btree.add_right(btree.root.right, 6)
 
-    btree.add_left(root.left.left, 7)
+    btree.add_left(btree.root.left.left, 7)
     print(btree.depth)
     print(btree.size)
     print(btree.inorder_traversal())
