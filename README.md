@@ -11,6 +11,8 @@
   - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
   - Array List ([java](ArrayList/java/src/ArrayList.java), [python](ArrayList/python/array_list.py))
   - Binary Tree ([java](BinaryTree/java/src/BinaryTree.java), [python](BinaryTree/python/binary_tree.py))
+  - Sorted Priority Queue ([java](PriorityQueue/java/src/SortedPriorityQueue.java), [python](PriorityQueue/python/sorted_priority_queue.py))
+  - Un-Sorted Priority Queue ([java](PriorityQueue/java/src/UnSortedPriorityQueue.java), [python](PriorityQueue/python/unsorted_priority_queue.py))
 - Algorithms
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
