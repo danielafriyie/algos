@@ -205,6 +205,17 @@ class BinaryTree(typing.Generic[E]):
         layers = self.get_layers()
         return [node for lst in layers for node in lst]
 
+    def visualize(self, node: typing.Optional[Node] = None, level: typing.Optional[int] = 0) -> None:
+        if self.empty:
+            return
+        if node is None:
+            node = self._root
+        if node.right:
+            self.visualize(node.right, level + 2)
+        print(((" " * 4) * level) + "-> " + f"{node.element}")
+        if node.left:
+            self.visualize(node.left, level + 2)
+
     def __iter__(self) -> typing.Iterator[Node]:
         return iter(self.breath_first_traversal())
 
@@ -229,3 +240,5 @@ if __name__ == "__main__":
     print(btree.preorder_traversal())
     print(btree.postorder_traversal())
     print(btree.breath_first_traversal())
+    print()
+    btree.visualize()
