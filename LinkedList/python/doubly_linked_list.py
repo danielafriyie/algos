@@ -7,29 +7,29 @@ class Node(typing.Generic[E]):
 
     def __init__(
             self, element: E,
-            next_: typing.Optional["Node"] = None,
-            previous: typing.Optional["Node"] = None
+            next_: typing.Optional["Node[E]"] = None,
+            previous: typing.Optional["Node[E]"] = None
     ) -> None:
         self._element = element
         self._next = next_
         self._previous = previous
 
     @property
-    def next(self) -> typing.Union["Node", None]:
+    def next(self) -> typing.Union["Node[E]", None]:
         return self._next
 
     @next.setter
-    def next(self, node: "Node") -> None:
+    def next(self, node: "Node[E]") -> None:
         self._next = node
         if node is not None:
             node._previous = self
 
     @property
-    def previous(self) -> typing.Union["Node", None]:
+    def previous(self) -> typing.Union["Node[E]", None]:
         return self._previous
 
     @previous.setter
-    def previous(self, node: "Node") -> None:
+    def previous(self, node: "Node[E]") -> None:
         self._previous = node
         if node is not None:
             node._next = self
@@ -52,34 +52,34 @@ class DoublyLinkedList(typing.Generic[E]):
 
     def __init__(
             self,
-            head: typing.Optional[Node] = None,
-            tail: typing.Optional[Node] = None
+            head: typing.Optional[Node[E]] = None,
+            tail: typing.Optional[Node[E]] = None
     ) -> None:
         self._head = head
         self._tail = tail
         self._size = 0
-        self._next: typing.Union[Node, None] = None
+        self._next: typing.Union[Node[E], None] = None
 
     @property
     def size(self) -> int:
         return self._size
 
     @property
-    def head(self) -> typing.Union[Node, None]:
+    def head(self) -> typing.Union[Node[E], None]:
         return self._head
 
     @head.setter
-    def head(self, node: Node) -> None:
+    def head(self, node: Node[E]) -> None:
         if self._head is not None:
             self._head.previous = node
         self._head = node
 
     @property
-    def tail(self) -> typing.Union[Node, None]:
+    def tail(self) -> typing.Union[Node[E], None]:
         return self._tail
 
     @tail.setter
-    def tail(self, node: Node) -> None:
+    def tail(self, node: Node[E]) -> None:
         if self._tail is not None:
             self._tail.next = node
         self._tail = node
@@ -88,19 +88,19 @@ class DoublyLinkedList(typing.Generic[E]):
     def empty(self) -> bool:
         return self._size < 1
 
-    def append(self, node: Node) -> None:
+    def append(self, node: Node[E]) -> None:
         self.tail = node
         if self._head is None:
             self.head = node
         self._size += 1
 
-    def prepend(self, node: Node) -> None:
+    def prepend(self, node: Node[E]) -> None:
         self.head = node
         if self._tail is None:
             self.tail = node
         self._size += 1
 
-    def remove(self, node: Node) -> None:
+    def remove(self, node: Node[E]) -> None:
         next_ = node.next
         previous = node.previous
         if next_ is not None:
@@ -115,7 +115,7 @@ class DoublyLinkedList(typing.Generic[E]):
         self._next = self._head
         return self
 
-    def __next__(self) -> Node:
+    def __next__(self) -> Node[E]:
         if self._next is None:
             raise StopIteration
         n = self._next
