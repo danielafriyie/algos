@@ -8,7 +8,7 @@ class Node(typing.Generic[E]):
     def __init__(
             self,
             element: E,
-            tree: "BinaryTree",
+            tree: typing.Optional["BinaryTree"] = None,
             parent: typing.Optional["Node"] = None,
             left: typing.Optional["Node"] = None,
             right: typing.Optional["Node"] = None,
@@ -18,7 +18,6 @@ class Node(typing.Generic[E]):
         self._parent = parent
         self._left = left
         self._right = right
-        self._layer = 0
 
     @property
     def element(self) -> E:
@@ -28,12 +27,20 @@ class Node(typing.Generic[E]):
     def tree(self) -> "BinaryTree":
         return self._tree
 
+    @tree.setter
+    def tree(self, tree: "BinaryTree") -> None:
+        if self._tree:
+            raise ValueError("Tree is not empty!")
+        self._tree = tree
+
     @property
     def parent(self) -> typing.Union["Node", None]:
         return self._parent
 
     @parent.setter
     def parent(self, node: "Node") -> None:
+        if self._parent:
+            raise ValueError("Parent is not empty!")
         self._parent = node
 
     @property
@@ -42,6 +49,8 @@ class Node(typing.Generic[E]):
 
     @left.setter
     def left(self, node: "Node") -> None:
+        if self._left:
+            raise ValueError("Left is not empty!")
         self._left = node
 
     @property
@@ -50,6 +59,8 @@ class Node(typing.Generic[E]):
 
     @right.setter
     def right(self, node: "Node") -> None:
+        if self._right:
+            raise ValueError("Right is not empty!")
         if self._left is None:
             raise ValueError("Left is empty!")
         self._right = node
@@ -71,9 +82,10 @@ class Node(typing.Generic[E]):
 
 class BinaryTree(typing.Generic[E]):
 
-    def __init__(self) -> None:
-        self._root = None
-        self._height = 0
+    def __init__(self, root: typing.Optional[Node] = None) -> None:
+        if root is not None:
+            root.tree = self
+        self._root = root
 
     @property
     def depth(self) -> int:
@@ -81,11 +93,12 @@ class BinaryTree(typing.Generic[E]):
 
     @property
     def height(self) -> int:
-        return self._height
+        layers = self.get_layers()
+        return sum(len(lst) for lst in layers)
 
     @property
     def size(self) -> int:
-        return self._height
+        return self.height
 
     @property
     def empty(self) -> bool:
@@ -100,7 +113,6 @@ class BinaryTree(typing.Generic[E]):
         if self._root is not None:
             raise ValueError("Tree is not empty!")
         self._root = node
-        self._height += 1
 
     def _validate(self, node: Node) -> None:
         if node.tree != self:
@@ -112,7 +124,6 @@ class BinaryTree(typing.Generic[E]):
             raise ValueError("Parents left is not empty!")
         node = Node(element, self, parent)
         parent.left = node
-        self._height += 1
         return node
 
     def add_right(self, parent: Node, element: E) -> Node:
@@ -121,7 +132,6 @@ class BinaryTree(typing.Generic[E]):
             raise ValueError("Parents right is not empty!")
         node = Node(element, self, parent)
         parent.right = node
-        self._height += 1
         return node
 
     def is_root(self, node: Node) -> bool:
