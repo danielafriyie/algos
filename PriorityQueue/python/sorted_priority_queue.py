@@ -126,11 +126,10 @@ class DoublyLinkedList(typing.Generic[E]):
     def insert_before(self, node1: Node[E], node2: Node[E]) -> None:
         """
         Inserts node2 before node1.
-        Raises ValueEror if node2 has next or previous.
         :param node1: inserts (comes) after node2
         :param node2: inserts before node1
         :return: None
-        :raises: ValueError
+        :raises: ValueError: if node2 has next or previous.
         """
         if node2.previous or node2.next:
             raise ValueError
@@ -139,15 +138,15 @@ class DoublyLinkedList(typing.Generic[E]):
         node2.next = node1
         if node1 == self._head:
             self._head = node2
+        self._size += 1
 
     def inesrt_after(self, node1: Node[E], node2: Node[E]) -> None:
         """
         Inserts node2 after node1.
-        Raises ValueEror if node2 has next or previous.
         :param node1: inserts (comes) before node2
         :param node2: inserts after node1
         :return: None
-        :raises: ValueError
+        :raises: ValueError: if node2 has next or previous.
         """
         if node2.previous or node2.next:
             raise ValueError
@@ -156,6 +155,7 @@ class DoublyLinkedList(typing.Generic[E]):
         node1.next = node2
         if self._tail == node1:
             self._tail = node2
+        self._size += 1
 
     def __iter__(self) -> "DoublyLinkedList":
         self._next = self._head
