@@ -123,7 +123,7 @@ class DoublyLinkedList(typing.Generic[E]):
         node.previous = None
         self._size -= 1
 
-    def __iter__(self) -> "DoublyLinkedList":
+    def __iter__(self) -> typing.Iterator[Node[E]]:
         self._next = self._head
         return self
 

@@ -111,7 +111,7 @@ class DoublyLinkedList(typing.Generic[E]):
         node.previous = None
         self._size -= 1
 
-    def __iter__(self) -> "DoublyLinkedList":
+    def __iter__(self) -> typing.Iterator[Node[E]]:
         self._next = self._head
         return self
 
@@ -154,7 +154,7 @@ class Stack(typing.Generic[E]):
     def push(self, element: E) -> None:
         self._list.prepend(Node(element))
 
-    def __iter__(self) -> "Stack":
+    def __iter__(self) -> typing.Iterator[E]:
         self._iterator = iter(self._list)
         return self
 

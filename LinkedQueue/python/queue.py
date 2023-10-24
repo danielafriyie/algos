@@ -111,7 +111,7 @@ class DoublyLinkedList(typing.Generic[E]):
         node.previous = None
         self._size -= 1
 
-    def __iter__(self) -> "DoublyLinkedList":
+    def __iter__(self) -> typing.Iterator[Node[E]]:
         self._next = self._head
         return self
 
@@ -154,7 +154,7 @@ class Queue(typing.Generic[E]):
     def enqueue(self, element: E) -> None:
         self._list.append(Node(element))
 
-    def __iter__(self) -> "Queue":
+    def __iter__(self) -> typing.Iterator[E]:
         self._iterator = iter(self._list)
         return self
 

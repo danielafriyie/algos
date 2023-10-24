@@ -173,7 +173,7 @@ class Deque(typing.Generic[E]):
         self._list.tail = previous
         return tail.element
 
-    def __iter__(self) -> "Deque":
+    def __iter__(self) -> typing.Iterator[E]:
         self._iterator = iter(self._list)
         return self
 
