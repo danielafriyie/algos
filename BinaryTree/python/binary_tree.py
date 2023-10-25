@@ -211,19 +211,39 @@ class BinaryTree(typing.Generic[E]):
         layers = self.get_layers()
         return [node for lst in layers for node in lst]
 
-    def visualize(self, node: typing.Optional[Node[E]] = None, level: typing.Optional[int] = 0) -> None:
-        if self.empty:
-            return
+    @staticmethod
+    def visualize_left_to_right(node: typing.Optional[Node[E]], level: typing.Optional[int]) -> str:
+
+        def _vis(n: Node[E], lvl: int) -> list[str]:
+            output = []
+            if n.right:
+                output.extend(_vis(n.right, lvl + 2))
+            output.append(f"""{((" " * 4) * lvl)}-> {n.element}""")
+            if n.left:
+                output.extend(_vis(n.left, lvl + 2))
+            return output
+
         if node is None:
-            node = self._root
-        if node.right:
-            self.visualize(node.right, level + 2)
-        print(((" " * 4) * level) + "-> " + f"{node.element}")
-        if node.left:
-            self.visualize(node.left, level + 2)
+            return ""
+        results = _vis(node, level)
+        return "\n".join(results)
+
+    @staticmethod
+    def visualize_top_to_bottom(node: typing.Optional[Node[E]], depth: int, start: typing.Optional[int] = 0) -> str:
+
+        def _vis(n: Node[E], d: int, s: int) -> list[str]:
+            val = f"{n.element}" if n is not None else " "
+            col = d ** 2
+            output = [(" " * col) + (" " * s), val]
+            output.extend(_vis(n.left, d - 1, col ))
+
+            return output
 
     def __iter__(self) -> typing.Iterator[Node[E]]:
         return iter(self.breath_first_traversal())
+
+    def __str__(self) -> str:
+        return self.visualize_left_to_right(self._root, 0)
 
 
 if __name__ == "__main__":
@@ -244,6 +264,5 @@ if __name__ == "__main__":
     print(btree.preorder_traversal())
     print(btree.postorder_traversal())
     print(btree.breath_first_traversal())
-    print(BinaryTree.node_height(btree.root.left))
     print()
-    btree.visualize()
+    print(btree)
