@@ -191,7 +191,6 @@ class MinHeapBinaryTree(typing.Generic[E]):
         if self.empty:
             node = Node(key, element, 0, self)
             self.root = node
-            self._size = 1
             return node
 
         parent = self.get_parent(self._size)
