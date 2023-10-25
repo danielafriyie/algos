@@ -7,6 +7,10 @@ class Full(Exception):
     pass
 
 
+class Empty(Exception):
+    pass
+
+
 class Node(typing.Generic[E]):
 
     def __init__(self, key: int, element: E, index: int, tree: typing.Optional["BinaryTree"] = None) -> None:
@@ -83,7 +87,6 @@ class BinaryTree(typing.Generic[E]):
         self._list: list[typing.Union[Node[E], None]] = [None] * maxsize
         self._list[0] = root
         self._size = 0 if root is None else 1
-        self._freed_indexes: list[int] = []
 
     @property
     def depth(self) -> int:
@@ -158,6 +161,8 @@ class BinaryTree(typing.Generic[E]):
         child._index = pindex
 
     def _up_heap(self, node: Node[E]) -> None:
+        if node is None:
+            return
         parent = node.parent
         if parent is None:
             return
@@ -175,12 +180,6 @@ class BinaryTree(typing.Generic[E]):
                     child_to_swap = right
             self._swap(node, child_to_swap)
             self._down_heap(node)
-        else:
-            parent = node.parent
-            if parent:
-                pright = parent.right
-                if (node == parent.left) and (pright is not None):
-                    self._swap(node, pright)
 
     def insert(self, key: int, element: E) -> Node[E]:
         self._check_size(1)
@@ -191,8 +190,7 @@ class BinaryTree(typing.Generic[E]):
             self._size = 1
             return node
 
-        idx = self._size if len(self._freed_indexes) < 1 else self._freed_indexes.pop(0)
-        parent = self.get_parent(idx)
+        parent = self.get_parent(self._size)
         if not parent.left:
             node = self.add_left(parent.index, key, element)
         else:
@@ -202,11 +200,12 @@ class BinaryTree(typing.Generic[E]):
 
     def pop(self) -> typing.Union[Node[E], None]:
         if self.empty:
-            return None
+            raise Empty
         root = self.root
-        self._down_heap(root)
+
+        self._swap(root, self._list[self._size - 1])
         self._list[root.index] = None
-        self._freed_indexes.append(root.index)
+        self._down_heap(self._list[0])
         self._size -= 1
         return root
 
