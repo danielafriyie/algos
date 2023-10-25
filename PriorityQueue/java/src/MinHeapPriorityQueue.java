@@ -1,16 +1,60 @@
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MinHeapPriorityQueue<E> {
+    private final MinHeapBinaryTree<E> tree;
 
-    public static void main(String[] args) {
-
+    public MinHeapPriorityQueue(int maxSize) {
+        this.tree = new MinHeapBinaryTree<>(maxSize);
     }
 
-    public static class Full extends Exception {}
+    public int size() {
+        return tree.size();
+    }
 
-    public static class Empty extends Exception {}
+    public boolean isEmpty() {
+        return tree.isEmpty();
+    }
+
+    public Node<E> insert(int key, E element) throws Full {
+        return tree.insert(key, element);
+    }
+
+    public Node<E> min() {
+        if (isEmpty())
+            return null;
+        return tree.getRoot();
+    }
+
+    public Node<E> removeMin() throws Empty {
+        if (isEmpty())
+            return null;
+        return tree.pop();
+    }
+
+    public void visualize() {
+        tree.visualize();
+    }
+
+    public static void main(String[] args) throws Empty, Full {
+        MinHeapPriorityQueue<Integer> queue = new MinHeapPriorityQueue<>(6);
+        queue.insert(0, 324);
+        queue.insert(1, 53);
+        queue.insert(5, 23);
+        queue.insert(4, 32);
+        queue.insert(10, 2);
+        queue.insert(3, 23234);
+        System.out.println(queue.size());
+        System.out.println(queue.min());
+        queue.visualize();
+    }
+
+    public static class Full extends Exception {
+    }
+
+    public static class Empty extends Exception {
+    }
 
     public static class Node<E> implements Comparable<Node<E>> {
         private final int key;
@@ -101,22 +145,21 @@ public class MinHeapPriorityQueue<E> {
 
     public static class MinHeapBinaryTree<E> {
         private final int maxSize;
-        private final Node<E>[] list;
+        private final List<Node<E>> list;
         private int size;
 
-        @SuppressWarnings("all")
         private MinHeapBinaryTree(int maxSize, Node<E> root) {
             if (maxSize < 1)
                 throw new IllegalArgumentException("Max size should be greater than or equal to 1!");
             this.maxSize = maxSize;
-            this.list = (Node<E>[]) new Object[maxSize];
+            this.list = new ArrayList<>(Collections.nCopies(maxSize, null));
             if (root != null) {
                 root.setTree(this);
                 this.size = 1;
             } else {
                 this.size = 0;
             }
-            list[0] = root;
+            list.set(0, root);
         }
 
         private MinHeapBinaryTree(int maxSize) {
@@ -144,11 +187,11 @@ public class MinHeapPriorityQueue<E> {
         }
 
         public Node<E> getRoot() {
-            return list[0];
+            return list.get(0);
         }
 
         public void setRoot(Node<E> node) {
-            list[0] = node;
+            list.set(0, node);
             this.size = 1;
         }
 
@@ -166,33 +209,33 @@ public class MinHeapPriorityQueue<E> {
         public Node<E> getParent(int index) {
             if (index == 0)
                 return null;
-            return list[(index - 1) / 2];
+            return list.get((index - 1) / 2);
         }
 
         public Node<E> addLeft(int index, int key, E element) throws Full {
             checkSize(1);
             int i = (2 * index) + 1;
             Node<E> node = new Node<>(key, element, i, this);
-            list[i] = node;
+            list.set(i, node);
             size++;
             return node;
         }
 
         public Node<E> getLeft(int index) {
-            return list[(2 * index) + 1];
+            return list.get((2 * index) + 1);
         }
 
         public Node<E> addRight(int index, int key, E element) throws Full {
             checkSize(1);
             int i = (2 * index) + 2;
             Node<E> node = new Node<>(key, element, i, this);
-            list[i] = node;
+            list.set(i, node);
             size++;
             return node;
         }
 
         public Node<E> getRight(int index) {
-            return list[(2 * index) + 2];
+            return list.get((2 * index) + 2);
         }
 
         public boolean isRoot(Node<E> node) {
@@ -203,8 +246,8 @@ public class MinHeapPriorityQueue<E> {
         private void swap(Node<E> parent, Node<E> child) {
             int pindex = parent.getIndex();
             int cindex = child.getIndex();
-            list[pindex] = child;
-            list[cindex] = parent;
+            list.set(pindex, child);
+            list.set(cindex, parent);
             parent.index = cindex;
             child.index = pindex;
         }
@@ -243,7 +286,7 @@ public class MinHeapPriorityQueue<E> {
             }
             Node<E> parent = getParent(size);
             Node<E> node;
-            if (parent.getLeft() != null) {
+            if (parent.getLeft() == null) {
                 node = addLeft(parent.getIndex(), key, element);
             } else {
                 node = addRight(parent.getIndex(), key, element);
@@ -256,22 +299,22 @@ public class MinHeapPriorityQueue<E> {
             if (isEmpty())
                 throw new Empty();
             Node<E> root = getRoot();
-            swap(root, list[size - 1]);
-            list[root.getIndex()] = null;
-            downHeap(list[0]);
+            swap(root, list.get(size - 1));
+            list.set(root.getIndex(), null);
+            downHeap(list.get(0));
             size--;
             return root;
         }
 
         public void visualize(Node<E> node, int level) {
-        if (isEmpty() || node == null)
-            return;
-        if (node.getRight() != null)
-            visualize(node.getRight(), level + 2);
-        System.out.println(" ".repeat(4).repeat(level) + "-> " + node.getElement());
-        if (node.getLeft() != null)
-            visualize(node.getLeft(), level + 2);
-    }
+            if (isEmpty() || node == null)
+                return;
+            if (node.getRight() != null)
+                visualize(node.getRight(), level + 2);
+            System.out.println(" ".repeat(4).repeat(level) + "-> " + node.getElement());
+            if (node.getLeft() != null)
+                visualize(node.getLeft(), level + 2);
+        }
 
         public void visualize() {
             visualize(getRoot(), 0);
