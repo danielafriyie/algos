@@ -38,16 +38,17 @@ public class MinHeapPriorityQueue<E> {
     }
 
     public static void main(String[] args) throws Empty, Full {
-        MinHeapPriorityQueue<Integer> queue = new MinHeapPriorityQueue<>(6);
-        queue.insert(0, 324);
-        queue.insert(1, 53);
-        queue.insert(5, 23);
-        queue.insert(4, 32);
-        queue.insert(10, 2);
-        queue.insert(3, 23234);
-        System.out.println(queue.size());
-        System.out.println(queue.min());
+        MinHeapPriorityQueue<Integer> queue = new MinHeapPriorityQueue<>(12);
+        for (int i : new int[] {14, 9, 29, 4, 26, 19, 8, 15, 5, 17, 12, 18}) {
+            queue.insert(i, i);
+        }
+        System.out.println();
         queue.visualize();
+        System.out.println();
+        System.out.println(queue.removeMin());
+        System.out.println();
+        queue.visualize();
+        System.out.println();
     }
 
     public static class Full extends Exception {
