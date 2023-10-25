@@ -13,7 +13,7 @@ class Empty(Exception):
 
 class Node(typing.Generic[E]):
 
-    def __init__(self, key: int, element: E, index: int, tree: typing.Optional["BinaryTree"] = None) -> None:
+    def __init__(self, key: int, element: E, index: int, tree: typing.Optional["MinHeapBinaryTree"] = None) -> None:
         self._key = key
         self._element = element
         self._tree = tree
@@ -28,11 +28,11 @@ class Node(typing.Generic[E]):
         return self._index
 
     @property
-    def tree(self) -> "BinaryTree":
+    def tree(self) -> "MinHeapBinaryTree":
         return self._tree
 
     @tree.setter
-    def tree(self, tree: "BinaryTree") -> None:
+    def tree(self, tree: "MinHeapBinaryTree") -> None:
         if self._tree:
             raise ValueError("Tree is not empty!")
         self._tree = tree
@@ -76,7 +76,7 @@ class Node(typing.Generic[E]):
         return self._key > other._key
 
 
-class BinaryTree(typing.Generic[E]):
+class MinHeapBinaryTree(typing.Generic[E]):
 
     def __init__(self, maxsize: int, root: typing.Optional[Node[E]] = None) -> None:
         if maxsize < 1:
@@ -219,13 +219,13 @@ class BinaryTree(typing.Generic[E]):
             return 0
         elif not node.has_children():
             return 1
-        return 1 + max(BinaryTree.height(node.left), BinaryTree.height(node.right))
+        return 1 + max(MinHeapBinaryTree.height(node.left), MinHeapBinaryTree.height(node.right))
 
     @staticmethod
     def get_layers(node: Node[E]) -> list[list[Node[E]]]:
         if node is None:
             return []
-        elif BinaryTree.is_leaf(node):
+        elif MinHeapBinaryTree.is_leaf(node):
             return [[node]]
         output = [[node]]
         children = node.children()
@@ -277,7 +277,7 @@ class BinaryTree(typing.Generic[E]):
                 if n.right:
                     _vis(n.right, d - 1, col + s)
 
-        layers = BinaryTree.get_layers(node)
+        layers = MinHeapBinaryTree.get_layers(node)
         results = [""] * _create_index(layers)
         _vis(node, depth, start)
         output = [""]
