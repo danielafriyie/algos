@@ -18,6 +18,7 @@ class Node(typing.Generic[E]):
         self._parent = parent
         self._left = left
         self._right = right
+        self._index = -1  # only computed when generating tree visualization
 
     @property
     def element(self) -> E:
@@ -89,11 +90,11 @@ class BinaryTree(typing.Generic[E]):
 
     @property
     def depth(self) -> int:
-        return len(self.get_layers())
+        return len(self.get_layers(self._root))
 
     @property
     def height(self) -> int:
-        layers = self.get_layers()
+        layers = self.get_layers(self._root)
         return sum(len(lst) for lst in layers)
 
     @property
@@ -149,13 +150,14 @@ class BinaryTree(typing.Generic[E]):
             return 1
         return 1 + max(BinaryTree.node_height(node.left), BinaryTree.node_height(node.right))
 
-    def get_layers(self) -> list[list[Node[E]]]:
-        if self.empty:
+    @staticmethod
+    def get_layers(node: Node[E]) -> list[list[Node[E]]]:
+        if node is None:
             return []
-        elif self.is_leaf(self._root):
-            return [[self._root]]
-        output = [[self._root]]
-        children = self._root.children()
+        elif BinaryTree.is_leaf(node):
+            return [[node]]
+        output = [[node]]
+        children = node.children()
         while len(children) > 0:
             output.append(children)
             children_temp = []
@@ -208,7 +210,7 @@ class BinaryTree(typing.Generic[E]):
         return output
 
     def breath_first_traversal(self) -> list[Node[E]]:
-        layers = self.get_layers()
+        layers = self.get_layers(self._root)
         return [node for lst in layers for node in lst]
 
     @staticmethod
@@ -231,19 +233,46 @@ class BinaryTree(typing.Generic[E]):
     @staticmethod
     def visualize_top_to_bottom(node: typing.Optional[Node[E]], depth: int, start: typing.Optional[int] = 0) -> str:
 
-        def _vis(n: Node[E], d: int, s: int) -> list[str]:
+        def _create_index(input_: list[list[Node[E]]]) -> int:
+            flattened = [n for lst in input_ for n in lst]
+            for idx, n in enumerate(flattened):
+                n._index = idx
+            return len(flattened)
+
+        def _vis(n: Node[E], d: int, s: int) -> None:
             val = f"{n.element}" if n is not None else " "
             col = d ** 2
-            output = [(" " * col) + (" " * s), val]
-            output.extend(_vis(n.left, d - 1, col ))
+            n_str = f"""{" " * col}{" " * s}{val}"""
+            results[n._index] = n_str
+            if n.left:
+                _vis(n.left, d - 1, s)
+                if n.right:
+                    _vis(n.right, d - 1, col + s)
 
-            return output
+        layers = BinaryTree.get_layers(node)
+        results = [""] * _create_index(layers)
+        _vis(node, depth, start)
+        output = [""]
+        for i in range(depth):
+            n = len(layers[i])
+            lst = []
+            for _ in range(n):
+                try:
+                    val = results.pop(0)
+                    split = val.split(" ")
+                    div = len("".join(lst))
+                    lst.append(" ".join(split[div:]))
+                except IndexError:
+                    break
+            output.append("".join(lst))
+        output.append("\n")
+        return "\n\n".join(output)
 
     def __iter__(self) -> typing.Iterator[Node[E]]:
         return iter(self.breath_first_traversal())
 
     def __str__(self) -> str:
-        return self.visualize_left_to_right(self._root, 0)
+        return self.visualize_top_to_bottom(self._root, self.depth)
 
 
 if __name__ == "__main__":
@@ -264,5 +293,4 @@ if __name__ == "__main__":
     print(btree.preorder_traversal())
     print(btree.postorder_traversal())
     print(btree.breath_first_traversal())
-    print()
     print(btree)
