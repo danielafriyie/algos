@@ -20,6 +20,10 @@ class Node(typing.Generic[E]):
         return self._element
 
     @property
+    def index(self) -> int:
+        return self._index
+
+    @property
     def tree(self) -> "BinaryTree":
         return self._tree
 
@@ -79,6 +83,7 @@ class BinaryTree(typing.Generic[E]):
         self._list: list[typing.Union[Node[E], None]] = [None] * maxsize
         self._list[0] = root
         self._size = 0 if root is None else 1
+        self._freed_indexes: list[int] = []
 
     @property
     def depth(self) -> int:
@@ -103,23 +108,23 @@ class BinaryTree(typing.Generic[E]):
     @root.setter
     def root(self, node: Node[E]) -> None:
         self._list[0] = node
+        self._size = 1
 
     def _validate(self, node: Node[E]) -> None:
         if node.tree != self:
             raise ValueError("Node does not belong to this tree!")
 
     def _check_size(self, n: int) -> None:
-        if (self._size + n) >= self._maxsize:
+        if (self._size + n) > self._maxsize:
             raise Full
 
-    def get_parent(self, index: int) -> Node[E]:
+    def get_parent(self, index: int) -> typing.Union[Node[E], None]:
         if index == 0:
-            return self.root
+            return None
         return self._list[(index - 1) // 2]
 
     def add_left(self, index: int, key: int, element: E) -> Node[E]:
         self._check_size(1)
-        self._validate(self.get_parent(index))
         i = (2 * index) + 1
         node = Node(key, element, i, self)
         self._list[i] = node
@@ -131,7 +136,6 @@ class BinaryTree(typing.Generic[E]):
 
     def add_right(self, index: int, key: int, element: E) -> Node[E]:
         self._check_size(1)
-        self._validate(self.get_parent(index))
         i = (2 * index) + 2
         node = Node(key, element, i, self)
         self._list[i] = node
@@ -145,17 +149,66 @@ class BinaryTree(typing.Generic[E]):
         self._validate(node)
         return (node == self.root) and (self.root is not None)
 
+    def _swap(self, parent: Node[E], child: Node[E]) -> None:
+        """Swaps parent position with the child's"""
+        pindex, cindex = parent.index, child.index
+        self._list[pindex] = child
+        self._list[cindex] = parent
+        parent._index = cindex
+        child._index = pindex
+
+    def _up_heap(self, node: Node[E]) -> None:
+        parent = node.parent
+        if parent is None:
+            return
+        if parent < node:
+            return
+        self._swap(parent, node)
+        self._up_heap(node)
+
+    def _down_heap(self, node: Node[E]) -> None:
+        left, right = node.left, node.right
+        if left:
+            child_to_swap = left
+            if right:
+                if right < left:
+                    child_to_swap = right
+            self._swap(node, child_to_swap)
+            self._down_heap(node)
+        else:
+            parent = node.parent
+            if parent:
+                pright = parent.right
+                if (node == parent.left) and (pright is not None):
+                    self._swap(node, pright)
+
     def insert(self, key: int, element: E) -> Node[E]:
         self._check_size(1)
 
         if self.empty:
             node = Node(key, element, 0, self)
             self.root = node
+            self._size = 1
             return node
 
-        node = Node(key, element, -1, self)
+        idx = self._size if len(self._freed_indexes) < 1 else self._freed_indexes.pop(0)
+        parent = self.get_parent(idx)
+        if not parent.left:
+            node = self.add_left(parent.index, key, element)
+        else:
+            node = self.add_right(parent.index, key, element)
 
+        self._up_heap(node)
 
+    def pop(self) -> typing.Union[Node[E], None]:
+        if self.empty:
+            return None
+        root = self.root
+        self._down_heap(root)
+        self._list[root.index] = None
+        self._freed_indexes.append(root.index)
+        self._size -= 1
+        return root
 
     @staticmethod
     def is_leaf(node: Node[E]) -> bool:
@@ -252,14 +305,4 @@ class BinaryTree(typing.Generic[E]):
 
 
 if __name__ == "__main__":
-    btree = BinaryTree(8, Node(0, 0, 0))
-    btree.add_left(0, 1, 1)
-    btree.add_right(0, 2, 2)
-    btree.add_left(1, 3, 3)
-    btree.add_right(1, 4, 4)
-
-    btree.add_left(2, 5, 5)
-    btree.add_right(2, 6, 6)
-
-    btree.add_left(3, 7, 7)
-    print(btree)
+    pass
