@@ -245,3 +245,5 @@ if __name__ == "__main__":
     print(btree.postorder_traversal())
     print(btree.breath_first_traversal())
     print(BinaryTree.node_height(btree.root.left))
+    print()
+    btree.visualize()
