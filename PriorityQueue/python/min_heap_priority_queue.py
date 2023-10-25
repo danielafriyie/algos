@@ -93,6 +93,10 @@ class MinHeapBinaryTree(typing.Generic[E]):
         return self.height(self.root)
 
     @property
+    def size(self) -> int:
+        return self._size
+
+    @property
     def maxsize(self) -> int:
         return self._maxsize
 
@@ -197,6 +201,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             node = self.add_right(parent.index, key, element)
 
         self._up_heap(node)
+        return node
 
     def pop(self) -> typing.Union[Node[E], None]:
         if self.empty:
@@ -303,5 +308,44 @@ class MinHeapBinaryTree(typing.Generic[E]):
         return self.visualize_top_to_bottom(self.root, self.depth)
 
 
+class PriorityQueue(typing.Generic[E]):
+
+    def __init__(self, maxsize: int) -> None:
+        self._list: MinHeapBinaryTree[E] = MinHeapBinaryTree(maxsize)
+
+    @property
+    def size(self) -> int:
+        return self._list.size
+
+    @property
+    def empty(self) -> bool:
+        return self._list.empty
+
+    def insert(self, key: int, element: E) -> Node[E]:
+        return self._list.insert(key, element)
+
+    def min(self) -> typing.Union[Node[E], None]:
+        if self.empty:
+            return None
+        return self._list.root
+
+    def remove_min(self) -> typing.Union[Node[E], None]:
+        if self.empty:
+            return None
+        return self._list.pop()
+
+    def __str__(self) -> str:
+        return str(self._list)
+
+
 if __name__ == "__main__":
-    pass
+    queue: PriorityQueue[int] = PriorityQueue(6)
+    queue.insert(0, 324)
+    queue.insert(1, 53)
+    queue.insert(5, 23)
+    queue.insert(4, 32)
+    queue.insert(10, 2)
+    queue.insert(3, 23234)
+    print(queue.size)
+    print(queue.min())
+    print(queue)
