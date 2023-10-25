@@ -228,6 +228,8 @@ class BinaryTree(typing.Generic[E]):
         if node is None:
             return ""
         results = _vis(node, level)
+        results.insert(0, "\n")
+        results.append("\n")
         return "\n".join(results)
 
     @staticmethod
