@@ -3,6 +3,10 @@ import typing
 E = typing.TypeVar("E")
 
 
+class Full(Exception):
+    pass
+
+
 class Node(typing.Generic[E]):
 
     def __init__(self, key: int, element: E, index: int, tree: typing.Optional["BinaryTree"] = None) -> None:
@@ -74,6 +78,7 @@ class BinaryTree(typing.Generic[E]):
         self._maxsize = maxsize
         self._list: list[typing.Union[Node[E], None]] = [None] * maxsize
         self._list[0] = root
+        self._size = 0 if root is None else 1
 
     @property
     def depth(self) -> int:
@@ -88,6 +93,10 @@ class BinaryTree(typing.Generic[E]):
         return self.root is None
 
     @property
+    def is_full(self) -> bool:
+        return self._size >= self._maxsize
+
+    @property
     def root(self) -> typing.Union[Node[E], None]:
         return self._list[0]
 
@@ -99,26 +108,34 @@ class BinaryTree(typing.Generic[E]):
         if node.tree != self:
             raise ValueError("Node does not belong to this tree!")
 
+    def _check_size(self, n: int) -> None:
+        if (self._size + n) >= self._maxsize:
+            raise Full
+
     def get_parent(self, index: int) -> Node[E]:
         if index == 0:
             return self.root
         return self._list[(index - 1) // 2]
 
     def add_left(self, index: int, key: int, element: E) -> Node[E]:
+        self._check_size(1)
         self._validate(self.get_parent(index))
         i = (2 * index) + 1
         node = Node(key, element, i, self)
         self._list[i] = node
+        self._size += 1
         return node
 
     def get_left(self, index: int) -> Node[E]:
         return self._list[(2 * index) + 1]
 
     def add_right(self, index: int, key: int, element: E) -> Node[E]:
+        self._check_size(1)
         self._validate(self.get_parent(index))
         i = (2 * index) + 2
         node = Node(key, element, i, self)
         self._list[i] = node
+        self._size += 1
         return node
 
     def get_right(self, index: int) -> Node[E]:
@@ -127,6 +144,18 @@ class BinaryTree(typing.Generic[E]):
     def is_root(self, node: Node[E]) -> bool:
         self._validate(node)
         return (node == self.root) and (self.root is not None)
+
+    def insert(self, key: int, element: E) -> Node[E]:
+        self._check_size(1)
+
+        if self.empty:
+            node = Node(key, element, 0, self)
+            self.root = node
+            return node
+
+        node = Node(key, element, -1, self)
+
+
 
     @staticmethod
     def is_leaf(node: Node[E]) -> bool:
