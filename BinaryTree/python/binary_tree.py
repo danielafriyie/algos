@@ -141,6 +141,14 @@ class BinaryTree(typing.Generic[E]):
     def is_leaf(node: Node[E]) -> bool:
         return not node.has_children()
 
+    @staticmethod
+    def node_height(node: Node[E]) -> int:
+        if node is None:
+            return 0
+        elif not node.has_children():
+            return 1
+        return 1 + max(BinaryTree.node_height(node.left), BinaryTree.node_height(node.right))
+
     def get_layers(self) -> list[list[Node[E]]]:
         if self.empty:
             return []
