@@ -14,7 +14,7 @@
   - Sorted Priority Queue ([java](PriorityQueue/java/src/SortedPriorityQueue.java), [python](PriorityQueue/python/sorted_priority_queue.py))
   - Un-Sorted Priority Queue ([java](PriorityQueue/java/src/UnSortedPriorityQueue.java), [python](PriorityQueue/python/unsorted_priority_queue.py))
   - Min-Heap Priority Queue ([java](PriorityQueue/java/src/MinHeapPriorityQueue.java), [python](PriorityQueue/python/min_heap_priority_queue.py))
-  - Hash Map ([java](), [python](HashMap/python/hashmap.py))
+  - Hash Map ([java](HashMap/java/src/HashMap.java), [python](HashMap/python/hashmap.py))
 - Algorithms
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
