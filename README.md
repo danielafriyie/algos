@@ -19,4 +19,5 @@
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
   - Binary Search ([java](BinarySearch/java/src/BinarySearch.java), [python](BinarySearch/python/binary_search.py))
-
+- Applications
+  - Binary Expression Tree ([python](BinaryExpressionTree/python/binary_expression_tree.py))
