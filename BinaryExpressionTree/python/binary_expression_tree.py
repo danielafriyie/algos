@@ -1,6 +1,9 @@
 import typing
+import traceback
 
 E = typing.TypeVar("E")
+Operator = typing.Literal["+", "-", "/", "*"]
+Operators = typing.get_args(Operator)
 
 
 class Node(typing.Generic[E]):
@@ -81,7 +84,10 @@ class BinaryExpressionTree:
 
     def __init__(self, expression: str) -> None:
         self._expression = expression.replace(" ", "")
+        self._index = 0
+        self._length = len(self._expression)
         self._root: typing.Union[Node[str], None] = None
+        self._validate()
 
     @property
     def depth(self) -> int:
@@ -99,6 +105,10 @@ class BinaryExpressionTree:
     @property
     def empty(self) -> bool:
         return self._root is None
+
+    @property
+    def root(self) -> Node[str]:
+        return self._root
 
     def inorder_traversal(self, node: typing.Optional[Node[E]] = None) -> list[Node[E]]:
         if self.empty:
@@ -224,8 +234,89 @@ class BinaryExpressionTree:
 
         return output
 
+    def _validate(self) -> None:
+        if self._expression.count("(") != self._expression.count(")"):
+            raise ValueError("Invalid Expression!")
+
+    def _peek(self, i: typing.Optional[int] = 1) -> str:
+        return self._expression[self._index + i]
+
+    def _get_left(self) -> Node[str]:
+        if self._peek(0) == "(":
+            self._index += 1
+            return self._get_root(")")
+        lst = []
+        while True:
+            try:
+                val = self._expression[self._index]
+                if val in Operators:
+                    break
+                lst.append(val)
+                self._index += 1
+            except IndexError:
+                break
+
+        return Node("".join(lst))
+
+    def _get_right(self, delimiter: typing.Optional[str] = None) -> Node[str]:
+        idx, lst, found = self._index, [], False
+        while True:
+            try:
+                val = self._expression[idx]
+                if val == "(":
+                    self._index += 1
+                    return self._get_root(")")
+                elif (delimiter is not None) and (val == delimiter):
+                    idx += 1
+                    found = True
+                    break
+                elif val in Operators:
+                    return self._get_root(delimiter)
+                lst.append(val)
+                idx += 1
+            except IndexError:
+                break
+
+        if (delimiter is not None) and (found is False):
+            raise ValueError("Invalid Expression!")
+        self._index = idx
+        return Node("".join(lst))
+
+    def _get_root(self, delimiter: typing.Optional[str] = None) -> Node[str]:
+        left = self._get_left()
+        root = Node(self._get_operator())
+        right = self._get_right(delimiter=delimiter)
+        root.left = left
+        root.right = right
+        return root
+
+    def _get_operator(self) -> Operator:
+        opr = self._expression[self._index]
+        self._index += 1
+        return opr
+
+    def parse(self) -> None:
+        self._root = self._get_root()
+
     def __iter__(self) -> typing.Iterator[Node[E]]:
         return iter(self.breath_first_traversal())
 
     def __str__(self) -> str:
+        if self.empty:
+            return ""
         return self.visualize_top_to_bottom(self._root, self.depth)
+
+
+if __name__ == "__main__":
+    print("\nEnter expression, eg: (2 + 3)")
+    while True:
+        query = input("\n>>> ")
+        if query.strip() == "q":
+            break
+        try:
+            exp_tree = BinaryExpressionTree(query)
+            exp_tree.parse()
+            print(exp_tree)
+        except Exception as e:
+            err = "".join(traceback.format_exception(type(e), e, e.__traceback__))
+            print(err)
