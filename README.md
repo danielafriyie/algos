@@ -20,4 +20,4 @@
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py))
   - Binary Search ([java](BinarySearch/java/src/BinarySearch.java), [python](BinarySearch/python/binary_search.py))
 - Applications
-  - Binary Expression Tree ([java](BinaryExpressionTree/java/src/BinaryExpressionTree.java) [python](BinaryExpressionTree/python/binary_expression_tree.py))
+  - Binary Expression Tree ([java](BinaryExpressionTree/java/src/BinaryExpressionTree.java), [python](BinaryExpressionTree/python/binary_expression_tree.py))
