@@ -85,7 +85,6 @@ class BinaryExpressionTree:
     def __init__(self, expression: str) -> None:
         self._expression = expression.replace(" ", "")
         self._index = 0
-        self._length = len(self._expression)
         self._root: typing.Union[Node[str], None] = None
         self._validate()
 
