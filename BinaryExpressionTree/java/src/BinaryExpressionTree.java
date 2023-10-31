@@ -2,6 +2,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Collections;
+import java.util.function.Function;
 
 public class BinaryExpressionTree {
     private final String expression;
@@ -160,6 +162,61 @@ public class BinaryExpressionTree {
         visualizeLeftToRight(root, 0);
     }
 
+    private void vis(Node<String> node, int depth, int start, List<String> list) {
+        String val = node.getElement();
+        int col = depth * depth;
+        String nStr = " ".repeat(col) + " ".repeat(start) + val;
+        list.set(node.getIndex(), nStr);
+        if (node.getLeft() != null) {
+            vis(node.getLeft(), depth - 1, start, list);
+            if (node.getRight() != null) {
+                vis(node.getRight(), depth - 1, col + start, list);
+            }
+        }
+    }
+
+    public String visualizeTopToBottom(Node<String> node, int depth, int start) {
+        Function<List<List<Node<String>>>, Integer> createIndex = (List<List<Node<String>>> input) -> {
+            List<Node<String>> flattened = new ArrayList<>();
+            int counter = 0;
+            for (List<Node<String>> list : input) {
+                for (Node<String> n : list) {
+                    n.setIndex(counter);
+                    flattened.add(n);
+                    counter += 1;
+                }
+            }
+            return flattened.size();
+        };
+
+        List<List<Node<String>>> layers = getLayers();
+        List<String> results = new ArrayList<>(Collections.nCopies(createIndex.apply(layers), ""));;
+        vis(node, depth, start, results);
+        List<String> output = new ArrayList<>();
+        for (int i = 0; i < depth; i++) {
+            int n = layers.get(i).size();
+            List<String> list = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                try {
+                    String val = results.remove(0);
+                    String[] split = val.split(" ");
+                    int div = String.join("", list).length();
+                    list.add(String.join(" ", Arrays.copyOfRange(split, div, split.length)));
+                } catch (IndexOutOfBoundsException ignore) {
+                    break;
+                }
+            }
+            output.add(String.join("", list));
+        }
+        return String.join("\n\n", output);
+    }
+
+    public String visualizeTopToBottom() {
+        if (isEmpty())
+            return "";
+        return visualizeTopToBottom(root, depth(), 0);
+    }
+
     public List<Node<String>> inOrderTraversal(Node<String> node) {
         List<Node<String>> output = new ArrayList<>();
         if (isEmpty() || node == null)
@@ -231,7 +288,7 @@ public class BinaryExpressionTree {
                 BinaryExpressionTree expTree = new BinaryExpressionTree(query);
                 expTree.parse();
                 System.out.println();
-                expTree.visualizeLeftToRight();
+                System.out.println(expTree.visualizeTopToBottom());
             } catch (Exception e) {
                 e.printStackTrace();
             }
