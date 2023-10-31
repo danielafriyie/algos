@@ -6,14 +6,236 @@ import java.util.Scanner;
 public class BinaryExpressionTree {
     private final String expression;
     private int index;
-    private final int length;
     private Node<String> root;
 
+    private static final List<String> OPERATORS = Arrays.asList("+", "-", "/", "*");
+
     public BinaryExpressionTree(String expression) {
-        this.expression = expression;
+        this.expression = expression.replaceAll(" ", "");
         this.index = 0;
-        this.length = this.expression.length();
         this.root = null;
+        this.validate();
+    }
+
+    public Node<String> getRoot() {
+        return root;
+    }
+
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    public static <T> boolean isLeaf(Node<T> node) {
+        return !node.hasChildren();
+    }
+
+    @SuppressWarnings("all")
+    public List<List<Node<String>>> getLayers() {
+        if (isEmpty())
+            return new ArrayList<>();
+        List<List<Node<String>>> output = new ArrayList<>();
+        output.add(Arrays.asList(root));
+        if (isLeaf(root)) {
+            return output;
+        }
+        List<Node<String>> children = root.children();
+        while (!children.isEmpty()) {
+            output.add(children);
+            List<Node<String>> temp = new ArrayList<>();
+            for (Node<String> child : children) {
+                temp.addAll(child.children());
+            }
+            children = temp;
+        }
+        return output;
+    }
+
+    public int depth() {
+        return getLayers().size();
+    }
+
+    public int height() {
+        List<List<Node<String>>> layers = getLayers();
+        int h = 0;
+        for (List<Node<String>> list : layers) {
+            h += list.size();
+        }
+        return h;
+    }
+
+    public int size() {
+        return height();
+    }
+
+    private void validate() {
+        long openB = expression.chars().filter(c -> c == '(').count();
+        long closeB = expression.chars().filter(c -> c == ')').count();
+        if (openB != closeB)
+            throw new IllegalArgumentException("Invalid Expression!");
+    }
+
+    private String peek(int index) {
+        return String.valueOf(expression.charAt(this.index + index));
+    }
+
+    private Node<String> createLeft() {
+        if (peek(0).equals("(")) {
+            this.index += 1;
+            return createRoot(")");
+        }
+
+        List<String> list = new ArrayList<>();
+        while (true) {
+            try {
+                String val = String.valueOf(expression.charAt(index));
+                if (OPERATORS.contains(val))
+                    break;
+                list.add(val);
+                this.index += 1;
+            } catch (IndexOutOfBoundsException ignore) {
+                break;
+            }
+        }
+
+        return new Node<>(String.join("", list));
+    }
+
+    private Node<String> createRight(String delimiter) {
+        int idx = index;
+        List<String> list = new ArrayList<>();
+
+        while (true) {
+            try {
+                String val = String.valueOf(expression.charAt(idx));
+                if (val.equals("(")) {
+                    this.index += 1;
+                    return createRoot(")");
+                } else if (val.equals(delimiter)) {
+                    idx += 1;
+                    break;
+                } else if (OPERATORS.contains(val)) {
+                    return createRoot(delimiter);
+                }
+                list.add(val);
+                idx += 1;
+            } catch (IndexOutOfBoundsException ignore) {
+                break;
+            }
+        }
+
+        this.index = idx;
+        return new Node<>(String.join("", list));
+    }
+
+    private String getOperator() {
+        String opr = String.valueOf(expression.charAt(index));
+        this.index += 1;
+        return opr;
+    }
+
+    private Node<String> createRoot(String delimiter) {
+        Node<String> left = createLeft();
+        Node<String> root = new Node<>(getOperator());
+        Node<String> right = createRight(delimiter);
+        root.setLeft(left);
+        root.setRight(right);
+        return root;
+    }
+
+    public void parse() {
+        this.root = createRoot(null);
+    }
+
+    public void visualizeLeftToRight(Node<String> node, int level) {
+        if (isEmpty() || node == null)
+            return;
+        if (node.getRight() != null)
+            visualizeLeftToRight(node.getRight(), level + 2);
+        System.out.println(" ".repeat(4).repeat(level) + "-> " + node.getElement());
+        if (node.getLeft() != null)
+            visualizeLeftToRight(node.getLeft(), level + 2);
+    }
+
+    public void visualizeLeftToRight() {
+        visualizeLeftToRight(root, 0);
+    }
+
+    public List<Node<String>> inOrderTraversal(Node<String> node) {
+        List<Node<String>> output = new ArrayList<>();
+        if (isEmpty() || node == null)
+            return output;
+        if (node.getLeft() != null) {
+            output.addAll(inOrderTraversal(node.getLeft()));
+        }
+        output.add(node);
+        if (node.getRight() != null) {
+            output.addAll(inOrderTraversal(node.getRight()));
+        }
+        return output;
+    }
+
+    public List<Node<String>> inOrderTraversal() {
+        return inOrderTraversal(root);
+    }
+
+    public List<Node<String>> preOrderTraversal(Node<String> node) {
+        List<Node<String>> output = new ArrayList<>();
+        if (isEmpty() || node == null)
+            return output;
+        output.add(node);
+        List<Node<String>> children = node.children();
+        for (Node<String> child : children) {
+            output.addAll(preOrderTraversal(child));
+        }
+        return output;
+    }
+
+    public List<Node<String>> preOrderTraversal() {
+        return preOrderTraversal(root);
+    }
+
+    public List<Node<String>> postOrderTraversal(Node<String> node) {
+        List<Node<String>> output = new ArrayList<>();
+        if (isEmpty() || node == null)
+            return output;
+        if (node.getLeft() != null)
+            output.addAll(postOrderTraversal(node.getLeft()));
+        if (node.getRight() != null)
+            output.addAll(postOrderTraversal(node.getRight()));
+        output.add(node);
+        return output;
+    }
+
+    public List<Node<String>> postOrderTraversal() {
+        return postOrderTraversal(root);
+    }
+
+    public List<Node<String>> breathFirstTraversal() {
+        List<List<Node<String>>> layers = getLayers();
+        List<Node<String>> output = new ArrayList<>();
+        for (List<Node<String>> list : layers) {
+            output.addAll(list);
+        }
+        return output;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("\nEnter expression, eg: (2 + 3)");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print("\n>>> ");
+            String query = scanner.nextLine();
+            if (query.strip().equalsIgnoreCase("q"))
+                break;
+            try {
+                BinaryExpressionTree expTree = new BinaryExpressionTree(query);
+                expTree.parse();
+                System.out.println();
+                expTree.visualizeLeftToRight();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static class Node<E> {
