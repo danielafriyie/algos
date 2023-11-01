@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * @param {Integer} n 
  * @returns {Integer}
