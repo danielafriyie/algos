@@ -1,14 +1,12 @@
 "use strict";
 
 /**
- * Sorts an array in ascending or descending order.
+ * Sorts an array in ascending order.
  * Sorting is done in place.
- * Default is ascending order
  * @param {Array} array 
- * @param {Boolean} reverse 
  * @returns {void}
  */
-function insertionSort(array, reverse) {
+function insertionSort(array) {
     let length = array.length;
     if (length <= 1) {
         return;
@@ -31,14 +29,9 @@ function insertionSort(array, reverse) {
             }
         }
     }
-
-    if (reverse) {
-        let n = parseInt(length / 2);
-        for (let i = 0; i < n; i++) {
-            let i0 = array[i];
-            let i1 = array[length - 1 - i];
-            array[i] = i1;
-            array[length - 1 - 1] = i0;
-        }
-    }
 }
+
+const arr1 = [5, 4, 6, 8, 1, 0, 3, 8, 8, 5, 1, 7, 3, 10];
+console.log(`Before int: ${arr1}`);
+insertionSort(arr1);
+console.log(`After int: ${arr1}\n`);
