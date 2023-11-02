@@ -141,15 +141,17 @@ class DoublyLinkedList {
     }
 }
 
-const lst = new DoublyLinkedList();
-lst.append(new Node(1));
-lst.append(new Node(2));
-lst.append(new Node(3));
-lst.append(new Node(5));
-lst.prepend(new Node(0));
-console.log(lst.size);
-console.log(lst.head);
-console.log(lst.tail);
-for (let n of lst) {
-    console.log(n);
-}
+(function() {
+    const lst = new DoublyLinkedList();
+    lst.append(new Node(1));
+    lst.append(new Node(2));
+    lst.append(new Node(3));
+    lst.append(new Node(5));
+    lst.prepend(new Node(0));
+    console.log(lst.size);
+    console.log(lst.head);
+    console.log(lst.tail);
+    for (let n of lst) {
+        console.log(n);
+    }
+})();
