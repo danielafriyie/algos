@@ -46,6 +46,29 @@ class Node {
     }
 }
 
+class DoublyLinkedListIterator {
+
+    constructor(node) {
+        this._node = node;
+    }
+
+    next() {
+        if (this._node === null) {
+            return {
+                value: null,
+                done: true
+            };
+        }
+        let n = this._node;
+        const result = {
+            value: n,
+            done: false
+        };
+        this._node = n.next;
+        return result;
+    }
+}
+
 class DoublyLinkedList {
 
     constructor() {
@@ -112,6 +135,10 @@ class DoublyLinkedList {
         node.previous = null;
         this._size--;
     }
+
+    [Symbol.iterator]() {
+        return new DoublyLinkedListIterator(this._head);
+    }
 }
 
 const lst = new DoublyLinkedList();
@@ -123,3 +150,6 @@ lst.prepend(new Node(0));
 console.log(lst.size);
 console.log(lst.head);
 console.log(lst.tail);
+for (let n of lst) {
+    console.log(n);
+}
