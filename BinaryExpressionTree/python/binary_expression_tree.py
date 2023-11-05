@@ -292,7 +292,7 @@ class BinaryExpressionTree:
     def _get_operator(self) -> Operator:
         opr = self._expression[self._index]
         self._index += 1
-        return opr
+        return typing.cast(Operator, opr)
 
     def parse(self) -> None:
         self._root = self._get_root()
