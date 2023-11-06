@@ -7,8 +7,7 @@ public class MergeSort {
         if (length <= 1) {
             return array;
         } else if (length == 2) {
-            E i0 = array[0];
-            E i1 = array[1];
+            E i0 = array[0], i1 = array[1];
             if (i1.compareTo(i0) < 0) {
                 array[0] = i1;
                 array[1] = i0;
@@ -19,11 +18,8 @@ public class MergeSort {
         int mid = length / 2;
         E[] sortedLeft = mergeSort(Arrays.copyOfRange(array, 0, mid));
         E[] sortedRight = mergeSort(Arrays.copyOfRange(array, mid, length));
-        int i = 0;
-        int j = 0;
-        int index = 0;
-        int lenLeft = sortedLeft.length;
-        int lenRight = sortedRight.length;
+        int i = 0, j = 0, index = 0;
+        int lenLeft = sortedLeft.length, lenRight = sortedRight.length;
         @SuppressWarnings("unchecked") E[] output = (E[]) new Comparable[lenLeft + lenRight];
 
         while ((i < lenLeft) && (j < lenRight)) {
