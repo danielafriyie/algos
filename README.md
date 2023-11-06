@@ -17,6 +17,7 @@
   - Hash Map ([java](HashMap/java/src/HashMap.java), [python](HashMap/python/hashmap.py))
 - Algorithms
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py), [javascript](InsertionSort/js/insertionSort.js))
+  - Merge Sort ([java](MergeSort/java/src/MergeSort.java), [python](MergeSort/python/merge_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py), [javascript](Factorial/js/factorial.js))
   - Binary Search ([java](BinarySearch/java/src/BinarySearch.java), [python](BinarySearch/python/binary_search.py))
 - Applications
