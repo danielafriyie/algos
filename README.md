@@ -9,7 +9,7 @@
   - Stack ([java](Stack/java/src/Stack.java), [python](Stack/python/stack.py), [dart](Stack/dart/bin/stack.dart))
   - Queue ([java](LinkedQueue/java/src/Queue.java), [python](LinkedQueue/python/queue.py))
   - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
-  - Array List ([java](ArrayList/java/src/ArrayList.java), [python](ArrayList/python/array_list.py))
+  - Array List ([java](ArrayList/java/src/ArrayList.java), [python](ArrayList/python/array_list.py), [dart](ArrayList/dart/bin/array_list.dart))
   - Binary Tree ([java](BinaryTree/java/src/BinaryTree.java), [python](BinaryTree/python/binary_tree.py))
   - Sorted Priority Queue ([java](PriorityQueue/java/src/SortedPriorityQueue.java), [python](PriorityQueue/python/sorted_priority_queue.py))
   - Un-Sorted Priority Queue ([java](PriorityQueue/java/src/UnSortedPriorityQueue.java), [python](PriorityQueue/python/unsorted_priority_queue.py))
