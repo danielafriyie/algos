@@ -17,7 +17,7 @@
   - Hash Map ([java](HashMap/java/src/HashMap.java), [python](HashMap/python/hashmap.py))
 - Algorithms
   - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py), [javascript](InsertionSort/js/insertionSort.js), [dart](InsertionSort/dart/bin/insertion_sort.dart))
-  - Merge Sort ([java](MergeSort/java/src/MergeSort.java), [python](MergeSort/python/merge_sort.py))
+  - Merge Sort ([java](MergeSort/java/src/MergeSort.java), [python](MergeSort/python/merge_sort.py), [dart](MergeSort/dart/bin/merge_sort.dart))
   - Quick Sort ([java](QuickSort/java/src/QuickSort.java), [python](QuickSort/python/quick_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py), [javascript](Factorial/js/factorial.js), [dart](Factorial/dart/bin/factorial.dart))
   - Binary Search ([java](BinarySearch/java/src/BinarySearch.java), [python](BinarySearch/python/binary_search.py), [dart](BinarySearch/dart/bin/binary_search.dart))
