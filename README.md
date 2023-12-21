@@ -16,7 +16,7 @@
   - Min-Heap Priority Queue ([java](PriorityQueue/java/src/MinHeapPriorityQueue.java), [python](PriorityQueue/python/min_heap_priority_queue.py))
   - Hash Map ([java](HashMap/java/src/HashMap.java), [python](HashMap/python/hashmap.py))
 - Algorithms
-  - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py), [javascript](InsertionSort/js/insertionSort.js))
+  - Insertion Sort ([java](InsertionSort/java/src/InsertionSort.java), [python](InsertionSort/python/insertion_sort.py), [javascript](InsertionSort/js/insertionSort.js), [dart](InsertionSort/dart/bin/insertion_sort.dart))
   - Merge Sort ([java](MergeSort/java/src/MergeSort.java), [python](MergeSort/python/merge_sort.py))
   - Quick Sort ([java](QuickSort/java/src/QuickSort.java), [python](QuickSort/python/quick_sort.py))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py), [javascript](Factorial/js/factorial.js), [dart](Factorial/dart/bin/factorial.dart))
