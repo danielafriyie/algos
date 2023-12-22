@@ -5,7 +5,7 @@
 
 # List of Algorithms
 - Data Structures
-  - Doubly Linked List ([java](LinkedList/java/src/doubly/DoublyLinkedList.java), [python](LinkedList/python/linked_list.py), [javascript](LinkedList/js/DoublyLinkedList.js))
+  - Doubly Linked List ([java](LinkedList/java/src/doubly/DoublyLinkedList.java), [python](LinkedList/python/linked_list.py), [javascript](LinkedList/js/DoublyLinkedList.js), [dart](LinkedList/dart/bin/doubly_linked_list.dart))
   - Stack ([java](Stack/java/src/Stack.java), [python](Stack/python/stack.py), [dart](Stack/dart/bin/stack.dart))
   - Queue ([java](LinkedQueue/java/src/Queue.java), [python](LinkedQueue/python/queue.py))
   - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
