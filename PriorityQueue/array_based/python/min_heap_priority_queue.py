@@ -67,7 +67,7 @@ class Node(typing.Generic[E]):
         return len(self.children()) > 0
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self._element})"
+        return f"{self.__class__.__name__}(key={self._key}, element={self._element})"
 
     def __lt__(self, other: "Node[E]") -> bool:
         return self._key < other._key
@@ -304,7 +304,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
         return iter(self._list)
 
     def __str__(self) -> str:
-        return self.visualize_top_to_bottom(self.root, self.depth)
+        return self.visualize_left_to_right(self.root, 0)
 
 
 class PriorityQueue(typing.Generic[E]):
@@ -339,12 +339,12 @@ class PriorityQueue(typing.Generic[E]):
 
 if __name__ == "__main__":
     queue: PriorityQueue[int] = PriorityQueue(6)
-    queue.insert(0, 324)
-    queue.insert(1, 53)
-    queue.insert(5, 23)
-    queue.insert(4, 32)
-    queue.insert(10, 2)
-    queue.insert(3, 23234)
+    queue.insert(0, 0)
+    queue.insert(1, 1)
+    queue.insert(5, 5)
+    queue.insert(4, 4)
+    queue.insert(10, 10)
+    queue.insert(3, 3)
     print(queue.size)
     print(queue.min())
     print(queue)

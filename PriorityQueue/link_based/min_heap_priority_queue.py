@@ -104,7 +104,7 @@ class Node(typing.Generic[E]):
         return (self._left is not None) or (self._right is not None)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self._element})"
+        return f"{self.__class__.__name__}(key={self._key}, element={self._element})"
 
     def __lt__(self, other: "Node[E]") -> bool:
         return self._key < other._key
