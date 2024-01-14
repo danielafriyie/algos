@@ -417,12 +417,12 @@ class PriorityQueue(typing.Generic[E]):
 
 if __name__ == "__main__":
     queue: PriorityQueue[int] = PriorityQueue()
-    queue.insert(0, 0)
     queue.insert(1, 1)
     queue.insert(5, 5)
-    queue.insert(4, 4)
-    queue.insert(10, 10)
     queue.insert(3, 3)
+    queue.insert(4, 4)
+    queue.insert(2, 2)
+    queue.insert(6, 6)
     print(queue.size)
     print(queue.min())
     print(queue)
