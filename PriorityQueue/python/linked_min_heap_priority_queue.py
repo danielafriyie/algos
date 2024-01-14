@@ -376,7 +376,9 @@ class MinHeapBinaryTree(typing.Generic[E]):
         left, right = self._current_node.left, self._current_node.right
         if right is not None:
             return right
-        return left
+        elif left is not None:
+            return left
+        return self._current_node
 
     def pop(self) -> typing.Union[Node[E], None]:
         if self.empty:
