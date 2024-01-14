@@ -3,7 +3,7 @@
 #### Data Structurs and Algorithms implemented in various programming languages.
 #### Implementations are for learning purposes only. They may be less efficient than the implementations in their various languages. Use them at your discretion.
 
-# List of Algorithms
+# List of Implementations
 - Data Structures
   - Doubly Linked List ([java](LinkedList/java/src/doubly/DoublyLinkedList.java), [python](LinkedList/python/linked_list.py), [javascript](LinkedList/js/DoublyLinkedList.js), [dart](LinkedList/dart/bin/doubly_linked_list.dart))
   - Stack ([java](Stack/java/src/Stack.java), [python](Stack/python/stack.py), [dart](Stack/dart/bin/stack.dart))
