@@ -235,12 +235,17 @@ class MinHeapBinaryTree(typing.Generic[E]):
         if child == parent_left:
             child.left = parent
             child.right = parent_right
-        elif child == parent_right:
+        else:
             child.right = parent
             child.left = parent_left
 
-        # set the child's parent
+        # swap the parent's position with the child
         child.parent = grand_parent
+        if grand_parent is not None:
+            if parent == grand_parent.left:
+                grand_parent.left = child
+            else:
+                grand_parent.right = child
 
         # Swap siblings
         parent.next_sibling = child_next_sibling
@@ -248,11 +253,13 @@ class MinHeapBinaryTree(typing.Generic[E]):
         child.next_sibling = parent_next_sibling
         child.previous_sibling = parent_previous_sibling
 
-        # Check and set the left most node and the current sibling
+        # Check and set the left most node, current sibling, and current node
         if self._left_most_node == child:
             self._left_most_node = parent
         if self._current_sibling == child:
             self._current_sibling = parent
+        if self._current_node == parent:
+            self._current_node = child
 
         if self.is_root(parent):
             self._root = child
