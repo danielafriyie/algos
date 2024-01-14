@@ -239,9 +239,12 @@ class MinHeapBinaryTree(typing.Generic[E]):
         if child == parent_left:
             child.left = parent
             child.right = parent_right
-        else:
+        elif child == parent_right:
             child.right = parent
             child.left = parent_left
+        else:
+            child.left = parent_left
+            child.right = parent_right
 
         # swap the parent's position with the child
         child.parent = grand_parent
@@ -398,10 +401,37 @@ class MinHeapBinaryTree(typing.Generic[E]):
             return root_node
 
         bottom_node = self.get_bottom_node()
+
+        # Set the bottom's node position on its parent to `None`
+        # i.e: prevents recursion error
+        bottom_node_parent = bottom_node.parent
+        if bottom_node_parent is not None:
+            if bottom_node_parent.left == bottom_node:
+                bottom_node_parent.left = bottom_node_parent.right
+            bottom_node_parent.right = None
+
         self._swap(root_node, bottom_node)
+
+        # clears the root node (set its reference pointers to `None`)
+        root_node.tree = None
+        root_node.parent = None
+        root_node.left = None
+        root_node.right = None
+        root_node.next_sibling = None
+        prev_sibling = root_node.previous_sibling
+        self._bottom_node = prev_sibling
+        if self._current_node == root_node:
+            self._current_node = prev_sibling
+        if self._left_most_node == root_node:
+            self._left_most_node = None
+        if self._current_sibling == root_node:
+            self._current_sibling = prev_sibling
+        if prev_sibling is not None:
+            prev_sibling.next_sibling = None
+        root_node.previous_sibling = None
+
         self._down_heap(bottom_node)
         self._size -= 1
-        root_node.tree = None
         return root_node
 
     def __str__(self) -> str:
@@ -475,8 +505,9 @@ if __name__ == "__main__":
     queue.insert(6, 6)
     queue.insert(1, 1)
     print(queue.size)
-    # print(queue.min())
+    print(queue)
     print(queue.remove_min())
+    print(queue.size)
     print(queue)
 
     for n in queue:
