@@ -1,5 +1,6 @@
 """
 Min-Heap Priority Queue based on a linked structure.
+Uses breath first traversal for iteration.
 """
 
 import typing
@@ -122,8 +123,10 @@ class MinHeapBinaryTree(typing.Generic[E]):
         self._maxsize = maxsize
         self._size = 0 if root is None else 1
         self._current_node: typing.Union[Node[E], None] = root
-        self._left_most_node: typing.Union[Node[E], None] = None  # left most node of the current layer
-        self._current_sibling: typing.Union[Node[E], None] = None  # current/previous sibling of the current layer
+        self._left_most_node: typing.Union[Node[E], None] = None  # left most node of the current depth
+        self._current_sibling: typing.Union[Node[E], None] = None  # current/previous sibling of the current depth
+        self._iter_next: typing.Union[Node[E], None] = None  # next node for iteration
+        self._iter_next_depth_left_most_node: typing.Union[Node[E], None] = None  # next depth left most node for iteration in breath first fashion
 
     @property
     def depth(self) -> int:
@@ -311,7 +314,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             Check if current node (could be root) is full (i.e: both its left and right is set).
             If full, then get its next sibling then return it.
             If next sibling is `None` that means, the current node is the last sibling
-            So move down a layer (return the left most node).
+            So move down a depth (return the left most node).
         """
         if not self._current_node.is_full():
             return self._current_node
@@ -321,7 +324,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
 
         self._current_node = self._left_most_node
 
-        # set current sibling and left most node to `None` to indicate an end of a layer.
+        # set current sibling and left most node to `None` to indicate an end of a depth.
         self._current_sibling = None
         self._left_most_node = None
 
@@ -348,7 +351,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             if not parent.left:
                 node = self.add_left(parent, key, element)
                 # If the left most node is `None`, then we are begining
-                # on a new layer, so set the left most node to the new node.
+                # on a new depth, so set the left most node to the new node.
                 if self._left_most_node is None:
                     self._left_most_node = node
             else:
@@ -395,6 +398,25 @@ class MinHeapBinaryTree(typing.Generic[E]):
     def __str__(self) -> str:
         return self.visualize_left_to_right(self._root, 0)
 
+    def __iter__(self) -> typing.Iterator[Node[E]]:
+        self._iter_next = self._root
+        if not self.empty:
+            self._iter_next_depth_left_most_node = self._root.left
+        return self
+
+    def __next__(self) -> Node[E]:
+        if self._iter_next is None:
+            raise StopIteration
+        node = self._iter_next
+        sibling = node.next_sibling
+        if sibling is not None:
+            self._iter_next = sibling
+        else:
+            self._iter_next = self._iter_next_depth_left_most_node
+            if self._iter_next_depth_left_most_node is not None:
+                self._iter_next_depth_left_most_node = self._iter_next_depth_left_most_node.left
+        return node
+
 
 class PriorityQueue(typing.Generic[E]):
 
@@ -425,6 +447,9 @@ class PriorityQueue(typing.Generic[E]):
     def __str__(self) -> str:
         return str(self._tree)
 
+    def __iter__(self) -> typing.Iterator[Node[E]]:
+        return iter(self._tree)
+
 
 if __name__ == "__main__":
     queue: PriorityQueue[int] = PriorityQueue()
@@ -437,3 +462,6 @@ if __name__ == "__main__":
     print(queue.size)
     print(queue.min())
     print(queue)
+
+    for n in queue:
+        print(n)
