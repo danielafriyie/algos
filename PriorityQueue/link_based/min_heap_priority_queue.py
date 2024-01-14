@@ -256,10 +256,14 @@ class MinHeapBinaryTree(typing.Generic[E]):
         # Check and set the left most node, current sibling, and current node
         if self._left_most_node == child:
             self._left_most_node = parent
+
         if self._current_sibling == child:
             self._current_sibling = parent
+
         if self._current_node == parent:
             self._current_node = child
+        elif self._current_node == child:
+            self._current_node = parent
 
         if self.is_root(parent):
             self._root = child
@@ -424,12 +428,12 @@ class PriorityQueue(typing.Generic[E]):
 
 if __name__ == "__main__":
     queue: PriorityQueue[int] = PriorityQueue()
-    queue.insert(1, 1)
     queue.insert(5, 5)
     queue.insert(3, 3)
     queue.insert(4, 4)
     queue.insert(2, 2)
     queue.insert(6, 6)
+    queue.insert(1, 1)
     print(queue.size)
     print(queue.min())
     print(queue)
