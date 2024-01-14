@@ -123,6 +123,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
         self._maxsize = maxsize
         self._size = 0 if root is None else 1
         self._current_node: typing.Union[Node[E], None] = root
+        self._bottom_node: typing.Union[Node[E], None] = root
         self._left_most_node: typing.Union[Node[E], None] = None  # left most node of the current depth
         self._current_sibling: typing.Union[Node[E], None] = None  # current/previous sibling of the current depth
         self._iter_next: typing.Union[Node[E], None] = None  # next node for iteration
@@ -256,12 +257,15 @@ class MinHeapBinaryTree(typing.Generic[E]):
         child.next_sibling = parent_next_sibling
         child.previous_sibling = parent_previous_sibling
 
-        # Check and set the left most node, current sibling, and current node
+        # Check and set the left most node, current sibling, current node, and bottom node
         if self._left_most_node == child:
             self._left_most_node = parent
 
         if self._current_sibling == child:
             self._current_sibling = parent
+
+        if self._bottom_node == child:
+            self._bottom_node = parent
 
         if self._current_node == parent:
             self._current_node = child
@@ -337,6 +341,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             node = Node(key, element, self)
             self._root = node
             self._current_node = node
+            self._bottom_node = node
             self._size += 1
             return node
 
@@ -360,6 +365,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             node.previous_sibling = self._current_sibling
             self._current_sibling = node
 
+        self._bottom_node = node
         self._up_heap(node)
         return node
 
@@ -373,32 +379,36 @@ class MinHeapBinaryTree(typing.Generic[E]):
 
         Returns 6 (the last/bottom node)
         """
-        left, right = self._current_node.left, self._current_node.right
+        left, right = self._bottom_node.left, self._bottom_node.right
         if right is not None:
             return right
         elif left is not None:
             return left
-        return self._current_node
+        return self._bottom_node
 
     def pop(self) -> typing.Union[Node[E], None]:
         if self.empty:
             raise Empty
 
-        root = self._root
+        root_node = self._root
         if self._size == 1:
             self._root = None
             self._size = 0
-            root.tree = None
-            return root
+            root_node.tree = None
+            return root_node
 
-        self._swap(root, self.get_bottom_node())
-        root.tree = None
-        self._down_heap(self._root)
+        bottom_node = self.get_bottom_node()
+        self._swap(root_node, bottom_node)
+        self._down_heap(bottom_node)
         self._size -= 1
-        return root
+        root_node.tree = None
+        return root_node
 
     def __str__(self) -> str:
         return self.visualize_left_to_right(self._root, 0)
+
+    def __len__(self) -> int:
+        return self._size
 
     def __iter__(self) -> typing.Iterator[Node[E]]:
         self._iter_next = self._root
@@ -449,6 +459,9 @@ class PriorityQueue(typing.Generic[E]):
     def __str__(self) -> str:
         return str(self._tree)
 
+    def __len__(self) -> int:
+        return self._tree.size
+
     def __iter__(self) -> typing.Iterator[Node[E]]:
         return iter(self._tree)
 
@@ -462,7 +475,8 @@ if __name__ == "__main__":
     queue.insert(6, 6)
     queue.insert(1, 1)
     print(queue.size)
-    print(queue.min())
+    # print(queue.min())
+    print(queue.remove_min())
     print(queue)
 
     for n in queue:
