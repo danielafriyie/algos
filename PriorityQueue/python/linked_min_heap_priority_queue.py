@@ -162,7 +162,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
         return not node.has_children()
 
     @staticmethod
-    def visualize_left_to_right(node: typing.Optional[Node[E]], level: typing.Optional[int]) -> str:
+    def visualize(node: typing.Optional[Node[E]], level: typing.Optional[int]) -> str:
         if node is None:
             return ""
 
@@ -393,12 +393,12 @@ class MinHeapBinaryTree(typing.Generic[E]):
         if self.empty:
             raise Empty
 
-        root_node = self._root
+        root = self._root
         if self._size == 1:
             self._root = None
             self._size = 0
-            root_node.tree = None
-            return root_node
+            root.tree = None
+            return root
 
         bottom_node = self.get_bottom_node()
 
@@ -410,32 +410,32 @@ class MinHeapBinaryTree(typing.Generic[E]):
                 bottom_node_parent.left = bottom_node_parent.right
             bottom_node_parent.right = None
 
-        self._swap(root_node, bottom_node)
+        self._swap(root, bottom_node)
 
         # clears the root node (set its reference pointers to `None`)
-        root_node.tree = None
-        root_node.parent = None
-        root_node.left = None
-        root_node.right = None
-        root_node.next_sibling = None
-        prev_sibling = root_node.previous_sibling
+        root.tree = None
+        root.parent = None
+        root.left = None
+        root.right = None
+        root.next_sibling = None
+        prev_sibling = root.previous_sibling
         self._bottom_node = prev_sibling
-        if self._current_node == root_node:
+        if self._current_node == root:
             self._current_node = prev_sibling
-        if self._left_most_node == root_node:
+        if self._left_most_node == root:
             self._left_most_node = None
-        if self._current_sibling == root_node:
+        if self._current_sibling == root:
             self._current_sibling = prev_sibling
         if prev_sibling is not None:
             prev_sibling.next_sibling = None
-        root_node.previous_sibling = None
+        root.previous_sibling = None
 
         self._down_heap(bottom_node)
         self._size -= 1
-        return root_node
+        return root
 
     def __str__(self) -> str:
-        return self.visualize_left_to_right(self._root, 0)
+        return self.visualize(self._root, 0)
 
     def __len__(self) -> int:
         return self._size
