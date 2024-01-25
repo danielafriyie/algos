@@ -505,10 +505,6 @@ if __name__ == "__main__":
     queue.insert(6, 6)
     queue.insert(1, 1)
     print(queue.size)
-    print(queue)
     print(queue.remove_min())
     print(queue.size)
     print(queue)
-
-    for n in queue:
-        print(n)
