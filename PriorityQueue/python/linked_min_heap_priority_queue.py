@@ -298,23 +298,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             self._swap(node, child_to_swap)
             self._down_heap(node)
 
-    def add_left(self, parent: Node[E], key: int, element: E) -> Node[E]:
-        self._check_size(1)
-        parent.left = Node(key, element, self)
-        self._size += 1
-        return parent.left
-
-    def add_right(self, parent: Node[E], key: int, element: E) -> Node[E]:
-        self._check_size(1)
-        parent.right = Node(key, element, self)
-        self._size += 1
-        return parent.right
-
-    def is_root(self, node: Node[E]) -> bool:
-        self._validate(node)
-        return (node == self._root) and (self._root is not None)
-
-    def get_parent(self) -> Node[E]:
+    def _get_parent(self) -> Node[E]:
         """
         Get the parent to use to insert/append new node.
         Strategy used:
@@ -338,42 +322,19 @@ class MinHeapBinaryTree(typing.Generic[E]):
 
         return self._current_node
 
-    def insert(self, key: int, element: E) -> Node[E]:
+    def _add_left(self, parent: Node[E], key: int, element: E) -> Node[E]:
         self._check_size(1)
+        parent.left = Node(key, element, self)
+        self._size += 1
+        return parent.left
 
-        if self.empty:
-            node = Node(key, element, self)
-            self._root = node
-            self._current_node = node
-            self._bottom_node = node
-            self._size += 1
-            return node
+    def _add_right(self, parent: Node[E], key: int, element: E) -> Node[E]:
+        self._check_size(1)
+        parent.right = Node(key, element, self)
+        self._size += 1
+        return parent.right
 
-        if self._size == 1:
-            # if size == 1, that means the current node (root) doesn't have any children
-            # so set the left most node and current sibling to the root's left
-            node = self.add_left(self._root, key, element)
-            self._left_most_node = node
-            self._current_sibling = node
-        else:
-            parent = self.get_parent()
-            if not parent.left:
-                node = self.add_left(parent, key, element)
-                # If the left most node is `None`, then we are begining
-                # on a new depth, so set the left most node to the new node.
-                if self._left_most_node is None:
-                    self._left_most_node = node
-            else:
-                node = self.add_right(parent, key, element)
-
-            node.previous_sibling = self._current_sibling
-            self._current_sibling = node
-
-        self._bottom_node = node
-        self._up_heap(node)
-        return node
-
-    def get_bottom_node(self) -> Node[E]:
+    def _get_bottom_node(self) -> Node[E]:
         """
         Returns the last/bottom node in the tree.
         Eg:
@@ -390,6 +351,45 @@ class MinHeapBinaryTree(typing.Generic[E]):
             return left
         return self._bottom_node
 
+    def is_root(self, node: Node[E]) -> bool:
+        self._validate(node)
+        return (node == self._root) and (self._root is not None)
+
+    def insert(self, key: int, element: E) -> Node[E]:
+        self._check_size(1)
+
+        if self.empty:
+            node = Node(key, element, self)
+            self._root = node
+            self._current_node = node
+            self._bottom_node = node
+            self._size += 1
+            return node
+
+        if self._size == 1:
+            # if size == 1, that means the current node (root) doesn't have any children
+            # so set the left most node and current sibling to the root's left
+            node = self._add_left(self._root, key, element)
+            self._left_most_node = node
+            self._current_sibling = node
+        else:
+            parent = self._get_parent()
+            if not parent.left:
+                node = self._add_left(parent, key, element)
+                # If the left most node is `None`, then we are begining
+                # on a new depth, so set the left most node to the new node.
+                if self._left_most_node is None:
+                    self._left_most_node = node
+            else:
+                node = self._add_right(parent, key, element)
+
+            node.previous_sibling = self._current_sibling
+            self._current_sibling = node
+
+        self._bottom_node = node
+        self._up_heap(node)
+        return node
+
     def pop(self) -> typing.Union[Node[E], None]:
         if self.empty:
             raise Empty
@@ -401,7 +401,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             root.tree = None
             return root
 
-        bottom_node = self.get_bottom_node()
+        bottom_node = self._get_bottom_node()
 
         # Set the bottom's node position on its parent to `None`
         # i.e: prevents recursion error
