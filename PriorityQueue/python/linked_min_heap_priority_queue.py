@@ -327,6 +327,7 @@ class MinHeapBinaryTree(typing.Generic[E]):
             return self._current_node
         next_sibling = self._current_node.next_sibling
         if next_sibling is not None:
+            self._current_node = next_sibling
             return next_sibling
 
         self._current_node = self._left_most_node
