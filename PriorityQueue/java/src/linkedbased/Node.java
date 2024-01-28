@@ -60,9 +60,6 @@ public class Node<E> implements Comparable<Node<E>> {
     }
 
     public void setRight(Node<E> node) throws IllegalArgumentException {
-        if (left == null) {
-            throw new IllegalArgumentException("Left is not set!");
-        }
         this.right = node;
         if (node != null)
             node.setParent(this);
@@ -75,7 +72,7 @@ public class Node<E> implements Comparable<Node<E>> {
     public void setNextSibling(Node<E> node) {
         this.nextSibling = node;
         if (node != null)
-            node.setPreviousSibling(this);
+            node.previousSibling = this;
     }
 
     public Node<E> getPreviousSibling() {
@@ -85,7 +82,7 @@ public class Node<E> implements Comparable<Node<E>> {
     public void setPreviousSibling(Node<E> node) {
         this.previousSibling = node;
         if (node != null)
-            node.setNextSibling(this);
+            node.nextSibling = this;
     }
 
     public boolean isFull() {

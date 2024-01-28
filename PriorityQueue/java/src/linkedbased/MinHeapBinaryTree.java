@@ -422,7 +422,7 @@ public class MinHeapBinaryTree<E> implements Iterable<Node<E>> {
 
         @Override
         public boolean hasNext() {
-            return next == null;
+            return next != null;
         }
 
         @Override
