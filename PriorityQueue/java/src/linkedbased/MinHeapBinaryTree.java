@@ -261,8 +261,8 @@ public class MinHeapBinaryTree<E> implements Iterable<Node<E>> {
     /**
      * Returns the last/bottom node in the tree.
      * Eg:
-     * 0
-     * 1    2
+     *      0
+     *   1    2
      * 3  4  5  6
      * Returns 6 (the last/bottom node)
      *
