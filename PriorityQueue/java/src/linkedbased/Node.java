@@ -102,7 +102,7 @@ public class Node<E> implements Comparable<Node<E>> {
     }
 
     public boolean hasChildren() {
-        return left != null;
+        return (left != null) || (right != null);
     }
 
     @Override
