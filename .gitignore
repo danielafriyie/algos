@@ -48,3 +48,4 @@ todos.txt
 *.bk
 *.session
 lib
+*.out
