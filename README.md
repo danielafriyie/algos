@@ -21,6 +21,6 @@
   - Merge Sort ([java](MergeSort/java/src/MergeSort.java), [python](MergeSort/python/merge_sort.py), [dart](MergeSort/dart/bin/merge_sort.dart), [c](MergeSort/c/merge_sort.c))
   - Quick Sort ([java](QuickSort/java/src/QuickSort.java), [python](QuickSort/python/quick_sort.py), [dart](QuickSort/dart/bin/quick_sort.dart), [c](QuickSort/c/quick_sort.c))
   - Factorial ([java](Factorial/java/src/Factorial.java), [python](Factorial/python/factorial.py), [javascript](Factorial/js/factorial.js), [dart](Factorial/dart/bin/factorial.dart), [c](Factorial/c/factorial.c))
-  - Binary Search ([java](BinarySearch/java/src/BinarySearch.java), [python](BinarySearch/python/binary_search.py), [dart](BinarySearch/dart/bin/binary_search.dart))
+  - Binary Search ([java](BinarySearch/java/src/BinarySearch.java), [python](BinarySearch/python/binary_search.py), [dart](BinarySearch/dart/bin/binary_search.dart), [c](BinarySearch/c/binary_search.c))
 - Applications
   - Binary Expression Tree ([java](BinaryExpressionTree/java/src/BinaryExpressionTree.java), [python](BinaryExpressionTree/python/binary_expression_tree.py))
