@@ -19,10 +19,13 @@ void merge_sort(int array[], int start, int end, int length) {
 
     int left_index = start;
     int left_length = start + mid;
+
     int right_index = start + mid;
     int right_length = end;
+
     int counter = 0;
     int temp_array[end - start];
+
     while ((left_index < left_length) && (right_index < right_length)) {
         int left_val = array[left_index];
         int right_val = array[right_index];
@@ -51,8 +54,9 @@ void merge_sort(int array[], int start, int end, int length) {
         counter++;
     }
 
-    // copy temp array values to main array
-    for (int k = 0; k < end; k++) {
+    // copy/replace temp array values to main array
+    int temp_array_length = end - start;
+    for (int k = 0; k < temp_array_length; k++) {
         array[start + k] = temp_array[k];
     }
 }
