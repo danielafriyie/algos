@@ -1,46 +1,79 @@
 #include <stdio.h>
 
-void array_copy(int source[], int copy[], int start, int end) {
-    for (int i = start; i < end; i++) {
-        copy[i - start] = source[i];
-    }
-}
-
-int *merge_sort(int array[]) {
-    int length = sizeof(array) / sizeof(array[0]);
+void merge_sort(int array[], int start, int end, int length) {
     if (length <= 1) {
-        return array;
+        return;
     } else if (length == 2) {
-        int i0 = array[0];
-        int i1 = array[1];
+        int i0 = array[start];
+        int i1 = array[start + 1];
         if (i1 < i0) {
-            array[0] = i1;
-            array[1] = i0;
+            array[start] = i1;
+            array[start + 1] = i0;
         }
-        return array;
+        return;
     }
 
     int mid = length / 2;
-    
-    int left_array[mid];
-    array_copy(array, left_array, 0, mid);
-    int sorted_left[] = merge_sort(left_array);
-    
-    int right_array[length - mid];
-    array_copy(array, right_array, mid, length);
-    int sorted_right[] = merge_sort(right_array);
+    merge_sort(array, start, mid, mid);                // sort left
+    merge_sort(array, mid + start, end, length - mid); // sort right
 
-    
+    int left_index = start;
+    int left_length = start + mid;
+    int right_index = start + mid;
+    int right_length = end;
+    int counter = 0;
+    int temp_array[end - start];
+    while ((left_index < left_length) && (right_index < right_length)) {
+        int left_val = array[left_index];
+        int right_val = array[right_index];
+        if (left_val < right_val) {
+            temp_array[counter] = left_val;
+            left_index++;
+        } else {
+            temp_array[counter] = right_val;
+            right_index++;
+        }
+
+        counter++;
+    }
+
+    // add remaing left values
+    while (left_index < left_length) {
+        temp_array[counter] = array[left_index];
+        left_index++;
+        counter++;
+    }
+
+    // add remaining right values
+    while (right_index < right_length) {
+        temp_array[counter] = array[right_index];
+        right_index++;
+        counter++;
+    }
+
+    // copy temp array values to main array
+    for (int k = 0; k < end; k++) {
+        array[start + k] = temp_array[k];
+    }
+}
+
+void print_array(int array[], int length) {
+    for (int i = 0; i < length; i++) {
+        printf("%d, ", array[i]);
+    }
+    printf("\n");
 }
 
 int main() {
-    int array[] = {92, 0};
-    int sorted[] = merge_sort(array);
-    int length = sizeof(sorted) / sizeof(sorted[0]);
-    for (int i = 0; i < length; i++) {
-        print("%d, ", sorted[i]);
-    }
-    printf("\n");
+    int array1[] = {12, 11, 13, 5, 6, 7};
+    int length = sizeof(array1) / sizeof(array1[0]);
+    merge_sort(array1, 0, length, length);
+    print_array(array1, length);
+
+    int array2[] = {92, 0, 3, 6, 1, 5, 8, 45, 75, 12, 98, 3, 65};
+    int length2 = sizeof(array2) / sizeof(array2[0]);
+    merge_sort(array2, 0, length2, length2);
+    print_array(array2, length2);
 
     return 0;
 }
