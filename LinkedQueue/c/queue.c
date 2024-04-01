@@ -123,6 +123,55 @@ void print_list(DoublyLinkedList *list) {
     }
 }
 
+typedef struct _Queue {
+    DoublyLinkedList *list;
+} Queue;
+
+const size_t QUEUE_SIZE = sizeof(Queue);
+
+void *dequeue(Queue *queue) {
+    Node *head = queue->list->head;
+    if (head == NULL) {
+        return NULL;
+    }
+    Node *next = head->next;
+    remove_node(queue->list, head, false);
+    set_head(queue->list, NULL);
+    set_head(queue->list, next);
+    void *element = head->element;
+    free(head);
+    return element;
+}
+
+void enqueue(Queue *queue, void *element) {
+    Node *node = node_constructor(element);
+    append(queue->list, node);
+}
+
+void *first(Queue *queue) {
+    Node *head = queue->list->head;
+    return (head != NULL) ? head->element : NULL;
+}
+
+Queue *queue_constructor() {
+    DoublyLinkedList *list = list_constructor();
+    Queue *queue = (Queue *)malloc(QUEUE_SIZE);
+    queue->list = list;
+    return queue;
+}
+
+void cleanup(Queue *queue) {
+    DoublyLinkedList *list = queue->list;
+    Node *node = list->head;
+    Node *next;
+    while (node != NULL) {
+        next = node->next;
+        free(node);
+        node = next;
+    }
+    free(list);
+    free(queue);
+}
 
 int main() {
 
