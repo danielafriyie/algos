@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 
 typedef struct _Node {
@@ -34,11 +35,74 @@ void print_node(Node *node) {
 }
 
 Node *node_constructor(void *element) {
-    Node *node = malloc(NODE_SIZE);
+    Node *node = (Node *)malloc(NODE_SIZE);
     node->element = element;
     node->next = NULL;
     node->previous = NULL;
     return node;
+}
+
+typedef struct _DoublyLinkedList {
+    Node *head;
+    Node *tail;
+    int size;
+} DoublyLinkedList;
+
+const size_t LIST_SIZE = sizeof(DoublyLinkedList);
+
+void set_head(DoublyLinkedList *list, Node *node) {
+    if (list->head != NULL) {
+        set_previous(list->head, node);
+    }
+    list->head = node;
+}
+
+void set_tail(DoublyLinkedList *list, Node *node) {
+    if (list->tail != NULL) {
+        set_next(list->tail, node);
+    }
+    list->tail = node;
+}
+
+bool is_empty(DoublyLinkedList *list) {
+    return list->size < 1;
+}
+
+void append(DoublyLinkedList *list, Node *node) {
+    set_tail(list, node);
+    if (list->head == NULL) {
+        set_head(list, node);
+    }
+    list->size++;
+}
+
+void prepend(DoublyLinkedList *list, Node *node) {
+    set_head(list, node);
+    if (list->tail == NULL) {
+        set_tail(list, node);
+    }
+    list->size++;
+}
+
+void remove(DoublyLinkedList *list, Node *node) {
+    Node *next = node->next;
+    Node *previous = node->previous;
+    if (next != NULL) {
+        set_previous(next, previous);
+    } else if (previous != NULL) {
+        set_next(previous, NULL);
+    }
+    node->next = NULL;
+    node->previous = NULL;
+    list->size--;
+}
+
+DoublyLinkedList *list_constructor() {
+    DoublyLinkedList *list = (DoublyLinkedList *)malloc(LIST_SIZE);
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+    return list;
 }
 
 int main() {
