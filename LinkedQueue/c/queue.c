@@ -1,6 +1,6 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #define NULL_INT -1
 
@@ -174,6 +174,19 @@ void cleanup(Queue *queue) {
 }
 
 int main() {
-
+    Queue *queue = queue_constructor();
+    int e1 = 1;
+    int e2 = 2;
+    int e3 = 3;
+    enqueue(queue, &e1);
+    enqueue(queue, &e2);
+    enqueue(queue, &e3);
+    printf("Size: %d\n", queue->list->size);
+    int *val = (int *)dequeue(queue);
+    printf("Dequeue value: %d\n", *val);
+    printf("Size: %d\n", queue->list->size);
+    printf("\n");
+    print_list(queue->list);
+    cleanup(queue);
     return 0;
 }
