@@ -87,7 +87,7 @@ void prepend(DoublyLinkedList *list, Node *node) {
     list->size++;
 }
 
-void remove_node(DoublyLinkedList *list, Node *node) {
+void remove_node(DoublyLinkedList *list, Node *node, bool free_node) {
     Node *next = node->next;
     Node *previous = node->previous;
     if (next != NULL) {
@@ -98,6 +98,9 @@ void remove_node(DoublyLinkedList *list, Node *node) {
     node->next = NULL;
     node->previous = NULL;
     list->size--;
+    if (free_node) {
+        free(node);
+    }
 }
 
 DoublyLinkedList *list_constructor() {
@@ -132,10 +135,12 @@ void *pop(Stack *stack) {
         return NULL;
     }
     Node *next = head->next;
-    remove_node(stack->list, head);
+    remove_node(stack->list, head, false);
     set_head(stack->list, NULL);
     set_head(stack->list, next);
-    return head->element;
+    void *element = head->element;
+    free(head);
+    return element;
 }
 
 void *top(Stack *stack) {
