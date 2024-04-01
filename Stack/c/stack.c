@@ -38,7 +38,7 @@ void print_node(Node *node) {
 }
 
 Node *node_constructor(void *element) {
-    Node *node = malloc(NODE_SIZE);
+    Node *node = (Node *)malloc(NODE_SIZE);
     node->element = element;
     node->next = NULL;
     node->previous = NULL;
@@ -101,7 +101,7 @@ void remove_node(DoublyLinkedList *list, Node *node) {
 }
 
 DoublyLinkedList *list_constructor() {
-    DoublyLinkedList *list = malloc(LIST_SIZE);
+    DoublyLinkedList *list = (DoublyLinkedList *)malloc(LIST_SIZE);
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
@@ -150,7 +150,7 @@ void push(Stack *stack, void *element) {
 
 Stack *stack_constructor() {
     DoublyLinkedList *list = list_constructor();
-    Stack *stack = malloc(STACK_SIZE);
+    Stack *stack = (Stack *)malloc(STACK_SIZE);
     stack->list = list;
     return stack;
 }
