@@ -1,5 +1,8 @@
-#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define NULL_INT -1
 
 typedef struct _Node {
     void *element;
@@ -29,13 +32,13 @@ void set_element(Node *node, void *element) {
 
 void print_node(Node *node) {
     int element = *((int *)node->element);
-    int next_element = (node->next != NULL) ? *((int *)node->next->element) : NULL;
-    int previous_element = (node->previous != NULL) ? *((int *)node->previous->element) : NULL;
+    int next_element = (node->next != NULL) ? *((int *)node->next->element) : NULL_INT;
+    int previous_element = (node->previous != NULL) ? *((int *)node->previous->element) : NULL_INT;
     printf("Node(element=%d, next=%d, previous=%d)\n", element, next_element, previous_element);
 }
 
 Node *node_constructor(void *element) {
-    Node *node = (Node *)malloc(NODE_SIZE);
+    Node *node = malloc(NODE_SIZE);
     node->element = element;
     node->next = NULL;
     node->previous = NULL;
@@ -84,7 +87,7 @@ void prepend(DoublyLinkedList *list, Node *node) {
     list->size++;
 }
 
-void remove(DoublyLinkedList *list, Node *node) {
+void remove_node(DoublyLinkedList *list, Node *node) {
     Node *next = node->next;
     Node *previous = node->previous;
     if (next != NULL) {
@@ -98,7 +101,7 @@ void remove(DoublyLinkedList *list, Node *node) {
 }
 
 DoublyLinkedList *list_constructor() {
-    DoublyLinkedList *list = (DoublyLinkedList *)malloc(LIST_SIZE);
+    DoublyLinkedList *list = malloc(LIST_SIZE);
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
@@ -124,19 +127,19 @@ typedef struct _Stack {
 const size_t STACK_SIZE = sizeof(Stack);
 
 void *pop(Stack *stack) {
-    Node *head = stack->list>head;
+    Node *head = stack->list->head;
     if (head == NULL) {
         return NULL;
     }
     Node *next = head->next;
-    remove(stack->list, head);
+    remove_node(stack->list, head);
     set_head(stack->list, NULL);
     set_head(stack->list, next);
     return head->element;
 }
 
 void *top(Stack *stack) {
-    Node *head = stack->list>head;
+    Node *head = stack->list->head;
     return (head != NULL) ? head->element : NULL;
 }
 
@@ -147,12 +150,39 @@ void push(Stack *stack, void *element) {
 
 Stack *stack_constructor() {
     DoublyLinkedList *list = list_constructor();
-    Stack *stack = (Stack *)malloc(STACK_SIZE);
+    Stack *stack = malloc(STACK_SIZE);
     stack->list = list;
     return stack;
 }
 
+void cleanup(Stack *stack) {
+    DoublyLinkedList *list = stack->list;
+    Node *node = list->head;
+    Node *next;
+    while (node != NULL) {
+        next = node->next;
+        free(node);
+        node = next;
+    }
+    free(list);
+    free(stack);
+}
+
 int main() {
+    Stack *stack = stack_constructor();
+    int e1 = 1;
+    int e2 = 2;
+    int e3 = 3;
+    push(stack, &e1);
+    push(stack, &e2);
+    push(stack, &e3);
+    printf("Size: %d\n", stack->list->size);
+    int *val = (int *)pop(stack);
+    printf("Pop value: %d\n", *val);
+    printf("Size: %d\n", stack->list->size);
+    printf("\n");
+    print_list(stack->list);
+    cleanup(stack);
 
     return 0;
 }
