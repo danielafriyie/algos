@@ -12,32 +12,32 @@ typedef struct _Node {
 
 const size_t NODE_SIZE = sizeof(Node);
 
-void set_next(Node *parent, Node *child) {
+void Node_set_next(Node *parent, Node *child) {
     parent->next = child;
     if (child != NULL) {
         child->previous = parent;
     }
 }
 
-void set_previous(Node *parent, Node *child) {
+void Node_set_previous(Node *parent, Node *child) {
     parent->previous = child;
     if (child != NULL) {
         child->next = parent;
     }
 }
 
-void set_element(Node *node, void *element) {
+void Node_set_element(Node *node, void *element) {
     node->element = element;
 }
 
-void print_node(Node *node) {
+void Node_print(Node *node) {
     int element = *((int *)node->element);
     int next_element = (node->next != NULL) ? *((int *)node->next->element) : NULL_INT;
     int previous_element = (node->previous != NULL) ? *((int *)node->previous->element) : NULL_INT;
     printf("Node(element=%d, next=%d, previous=%d)\n", element, next_element, previous_element);
 }
 
-Node *node_constructor(void *element) {
+Node *Node_new(void *element) {
     Node *node = (Node *)malloc(NODE_SIZE);
     node->element = element;
     node->next = NULL;
@@ -53,47 +53,47 @@ typedef struct _DoublyLinkedList {
 
 const size_t LIST_SIZE = sizeof(DoublyLinkedList);
 
-void set_head(DoublyLinkedList *list, Node *node) {
+void DoublyLinkedList_set_head(DoublyLinkedList *list, Node *node) {
     if (list->head != NULL) {
-        set_previous(list->head, node);
+        Node_set_previous(list->head, node);
     }
     list->head = node;
 }
 
-void set_tail(DoublyLinkedList *list, Node *node) {
+void DoublyLinkedList_set_tail(DoublyLinkedList *list, Node *node) {
     if (list->tail != NULL) {
-        set_next(list->tail, node);
+        Node_set_next(list->tail, node);
     }
     list->tail = node;
 }
 
-bool is_empty(DoublyLinkedList *list) {
+bool DoublyLinkedList_is_empty(DoublyLinkedList *list) {
     return list->size < 1;
 }
 
-void append(DoublyLinkedList *list, Node *node) {
-    set_tail(list, node);
+void DoublyLinkedList_append(DoublyLinkedList *list, Node *node) {
+    DoublyLinkedList_set_tail(list, node);
     if (list->head == NULL) {
-        set_head(list, node);
+        DoublyLinkedList_set_head(list, node);
     }
     list->size++;
 }
 
-void prepend(DoublyLinkedList *list, Node *node) {
-    set_head(list, node);
+void DoublyLinkedList_prepend(DoublyLinkedList *list, Node *node) {
+    DoublyLinkedList_set_head(list, node);
     if (list->tail == NULL) {
-        set_tail(list, node);
+        DoublyLinkedList_set_tail(list, node);
     }
     list->size++;
 }
 
-void remove_node(DoublyLinkedList *list, Node *node, bool free_node) {
+void DoublyLinkedList_remove(DoublyLinkedList *list, Node *node, bool free_node) {
     Node *next = node->next;
     Node *previous = node->previous;
     if (next != NULL) {
-        set_previous(next, previous);
+        Node_set_previous(next, previous);
     } else if (previous != NULL) {
-        set_next(previous, NULL);
+        Node_set_next(previous, NULL);
     }
     node->next = NULL;
     node->previous = NULL;
@@ -103,7 +103,7 @@ void remove_node(DoublyLinkedList *list, Node *node, bool free_node) {
     }
 }
 
-DoublyLinkedList *list_constructor() {
+DoublyLinkedList *DoublyLinkedList_new() {
     DoublyLinkedList *list = (DoublyLinkedList *)malloc(LIST_SIZE);
     list->head = NULL;
     list->tail = NULL;
@@ -111,14 +111,14 @@ DoublyLinkedList *list_constructor() {
     return list;
 }
 
-void print_list(DoublyLinkedList *list) {
+void DoublyLinkedList_print(DoublyLinkedList *list) {
     Node *node = list->head;
     if (node == NULL) {
         return;
     }
 
     while (node != NULL) {
-        print_node(node);
+        Node_print(node);
         node = node->next;
     }
 }
@@ -129,32 +129,32 @@ typedef struct _Queue {
 
 const size_t QUEUE_SIZE = sizeof(Queue);
 
-void *dequeue(Queue *queue) {
+void *Queue_dequeue(Queue *queue) {
     Node *head = queue->list->head;
     if (head == NULL) {
         return NULL;
     }
     Node *next = head->next;
-    remove_node(queue->list, head, false);
-    set_head(queue->list, NULL);
-    set_head(queue->list, next);
+    DoublyLinkedList_remove(queue->list, head, false);
+    DoublyLinkedList_set_head(queue->list, NULL);
+    DoublyLinkedList_set_head(queue->list, next);
     void *element = head->element;
     free(head);
     return element;
 }
 
-void enqueue(Queue *queue, void *element) {
-    Node *node = node_constructor(element);
-    append(queue->list, node);
+void Queue_enqueue(Queue *queue, void *element) {
+    Node *node = Node_new(element);
+    DoublyLinkedList_append(queue->list, node);
 }
 
-void *first(Queue *queue) {
+void *Queue_first(Queue *queue) {
     Node *head = queue->list->head;
     return (head != NULL) ? head->element : NULL;
 }
 
-Queue *queue_constructor() {
-    DoublyLinkedList *list = list_constructor();
+Queue *Queue_new() {
+    DoublyLinkedList *list = DoublyLinkedList_new();
     Queue *queue = (Queue *)malloc(QUEUE_SIZE);
     queue->list = list;
     return queue;
@@ -174,19 +174,19 @@ void cleanup(Queue *queue) {
 }
 
 int main() {
-    Queue *queue = queue_constructor();
+    Queue *queue = Queue_new();
     int e1 = 1;
     int e2 = 2;
     int e3 = 3;
-    enqueue(queue, &e1);
-    enqueue(queue, &e2);
-    enqueue(queue, &e3);
+    Queue_enqueue(queue, &e1);
+    Queue_enqueue(queue, &e2);
+    Queue_enqueue(queue, &e3);
     printf("Size: %d\n", queue->list->size);
-    int *val = (int *)dequeue(queue);
+    int *val = (int *)Queue_dequeue(queue);
     printf("Dequeue value: %d\n", *val);
     printf("Size: %d\n", queue->list->size);
     printf("\n");
-    print_list(queue->list);
+    DoublyLinkedList_print(queue->list);
     cleanup(queue);
     return 0;
 }
