@@ -8,7 +8,7 @@
   - Doubly Linked List ([java](LinkedList/java/src/doubly/DoublyLinkedList.java), [python](LinkedList/python/doubly_linked_list.py), [javascript](LinkedList/js/DoublyLinkedList.js), [dart](LinkedList/dart/bin/doubly_linked_list.dart), [c](LinkedList/c/doubly_linked_list.c))
   - Stack ([java](Stack/java/src/Stack.java), [python](Stack/python/stack.py), [dart](Stack/dart/bin/stack.dart), [c](Stack/c/stack.c))
   - Queue ([java](LinkedQueue/java/src/Queue.java), [python](LinkedQueue/python/queue.py), [c](LinkedQueue/c/queue.c))
-  - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py))
+  - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py), [c](DoubleEndedQueue/c/double_ended_queue.c))
   - Array List ([java](ArrayList/java/src/ArrayList.java), [python](ArrayList/python/array_list.py), [dart](ArrayList/dart/bin/array_list.dart))
   - Binary Tree ([java](BinaryTree/java/src/BinaryTree.java), [python](BinaryTree/python/binary_tree.py) [dart](BinaryTree/dart/bin/binary_tree.dart))
   - Sorted Priority Queue (Array/List Based) ([java](PriorityQueue/java/src/arraybased/SortedPriorityQueue.java), [python](PriorityQueue/python/sorted_priority_queue.py))
