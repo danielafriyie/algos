@@ -121,6 +121,8 @@ typedef struct _Stack {
     DoublyLinkedList *list;
 } Stack;
 
+const size_t STACK_SIZE = sizeof(Stack);
+
 void *pop(Stack *stack) {
     Node *head = stack->list>head;
     if (head == NULL) {
@@ -141,6 +143,13 @@ void *top(Stack *stack) {
 void push(Stack *stack, void *element) {
     Node *node = node_constructor(element);
     prepend(stack->list, node);
+}
+
+Stack *stack_constructor() {
+    DoublyLinkedList *list = list_constructor();
+    Stack *stack = (Stack *)malloc(STACK_SIZE);
+    stack->list = list;
+    return stack;
 }
 
 int main() {
