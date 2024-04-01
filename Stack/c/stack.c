@@ -105,6 +105,18 @@ DoublyLinkedList *list_constructor() {
     return list;
 }
 
+void print_list(DoublyLinkedList *list) {
+    Node *node = list->head;
+    if (node == NULL) {
+        return;
+    }
+
+    while (node != NULL) {
+        print_node(node);
+        node = node->next;
+    }
+}
+
 int main() {
 
     return 0;
