@@ -117,6 +117,32 @@ void print_list(DoublyLinkedList *list) {
     }
 }
 
+typedef struct _Stack {
+    DoublyLinkedList *list;
+} Stack;
+
+void *pop(Stack *stack) {
+    Node *head = stack->list>head;
+    if (head == NULL) {
+        return NULL;
+    }
+    Node *next = head->next;
+    remove(stack->list, head);
+    set_head(stack->list, NULL);
+    set_head(stack->list, next);
+    return head->element;
+}
+
+void *top(Stack *stack) {
+    Node *head = stack->list>head;
+    return (head != NULL) ? head->element : NULL;
+}
+
+void push(Stack *stack, void *element) {
+    Node *node = node_constructor(element);
+    prepend(stack->list, node);
+}
+
 int main() {
 
     return 0;
