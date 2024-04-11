@@ -10,7 +10,7 @@
   - Queue ([java](LinkedQueue/java/src/Queue.java), [python](LinkedQueue/python/queue.py), [c](LinkedQueue/c/queue.c))
   - Double Ended Queue ([java](DoubleEndedQueue/java/src/Deque.java), [python](DoubleEndedQueue/python/double_ended_queue.py), [c](DoubleEndedQueue/c/double_ended_queue.c))
   - Array List ([java](ArrayList/java/src/ArrayList.java), [python](ArrayList/python/array_list.py), [dart](ArrayList/dart/bin/array_list.dart), [c](ArrayList/c/array_list.c))
-  - Binary Tree ([java](BinaryTree/java/src/BinaryTree.java), [python](BinaryTree/python/binary_tree.py) [dart](BinaryTree/dart/bin/binary_tree.dart))
+  - Binary Tree ([java](BinaryTree/java/src/BinaryTree.java), [python](BinaryTree/python/binary_tree.py) [dart](BinaryTree/dart/bin/binary_tree.dart), [c](BinaryTree/c/binary_tree.c))
   - Sorted Priority Queue (Array/List Based) ([java](PriorityQueue/java/src/arraybased/SortedPriorityQueue.java), [python](PriorityQueue/python/sorted_priority_queue.py))
   - Un-Sorted Priority Queue (Array/List Based) ([java](PriorityQueue/java/src/arraybased/UnSortedPriorityQueue.java), [python](PriorityQueue/python/unsorted_priority_queue.py))
   - Min-Heap Priority Queue (Array/List Based) ([java](PriorityQueue/java/src/arraybased/MinHeapPriorityQueue.java), [python](PriorityQueue/python/min_heap_priority_queue.py))
