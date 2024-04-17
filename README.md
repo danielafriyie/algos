@@ -13,7 +13,7 @@
   - Binary Tree ([java](BinaryTree/java/src/BinaryTree.java), [python](BinaryTree/python/binary_tree.py) [dart](BinaryTree/dart/bin/binary_tree.dart), [c](BinaryTree/c/binary_tree.c))
   - Sorted Priority Queue ([java](PriorityQueue/java/src/arraybased/SortedPriorityQueue.java), [python](PriorityQueue/python/sorted_priority_queue.py), [c](PriorityQueue/c/sorted_priority_queue.c))
   - Un-Sorted Priority Queue ([java](PriorityQueue/java/src/arraybased/UnSortedPriorityQueue.java), [python](PriorityQueue/python/unsorted_priority_queue.py), [c](PriorityQueue/c/unsorted_priority_queue.c))
-  - Min-Heap Priority Queue (Based on Array/List) ([java](PriorityQueue/java/src/arraybased/MinHeapPriorityQueue.java), [python](PriorityQueue/python/min_heap_priority_queue.py))
+  - Min-Heap Priority Queue (Based on Array/List) ([java](PriorityQueue/java/src/arraybased/MinHeapPriorityQueue.java), [python](PriorityQueue/python/min_heap_priority_queue.py), [c](PriorityQueue/c/min_heap_priority_queue.c))
   - Min-Heap Priority Queue (Based on Linked BinaryTree) ([java](PriorityQueue/java/src/linkedbased/PriorityQueue.java), [python](PriorityQueue/python/linked_min_heap_priority_queue.py))
   - Hash Map ([java](HashMap/java/src/HashMap.java), [python](HashMap/python/hashmap.py))
 - Algorithms
