@@ -6,7 +6,6 @@
 #define DEFAULT_CAPACITY 10
 #define DEFAULT_MULTIPLIER 2
 #define DEFAULT_LOAD_FACTOR = 0.75
-#define DEFAULT_SHRINK_FACTOR 0.25
 
 const int NULL_INT = -1;
 
@@ -50,7 +49,7 @@ void Node_set_next(Node *parent, Node *child) {
 }
 
 typedef struct _LinkedList {
-    int size;
+    unsigned int size;
     Node *head;
     Node *tail;
 } LinkedList;
@@ -95,6 +94,34 @@ void LinkedList_remove(LinkedList *list, Node *node) {
     node->next = NULL;
     list->size--;
     free(node);
+}
+
+typedef struct _HashMap {
+    unsigned int size;
+    unsigned int capacity;
+    unsigned int multiplier;
+    double load_factor;
+    LinkedList **buckets;
+} HashMap;
+
+const size_t HASHMAP_SIZE = sizeof(HashMap);
+
+HashMap *HashMap_new(unsigned int capacity, unsigned int multiplier, double load_factor) {
+    HashMap *hash_map = malloc(HASHMAP_SIZE);
+    hash_map->size = 0;
+    hash_map->capacity = capacity;
+    hash_map->multiplier = multiplier;
+    hash_map->load_factor = load_factor;
+    hash_map->buckets = calloc(capacity, LINKEDLIST_SIZE);
+    return hash_map;
+}
+
+bool HashMap_is_empty(HashMap *map) {
+    return map->size < 1;
+}
+
+Pair **HashMap_get_pairs(HashMap *map) {
+    
 }
 
 int main() {
