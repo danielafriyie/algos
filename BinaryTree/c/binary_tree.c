@@ -224,26 +224,26 @@ void BinaryTree_breath_first_traversal(Node *node, bool print_node, bool continu
     }
 }
 
+void BinaryTree_visualize_tree(BinaryTree *tree, Node *node, int level) {
+    if (node->right != NULL)
+        BinaryTree_visualize_tree(tree, node->right, level + 4);
+
+    for (int i = 0; i < level; i++) {
+        printf(" ");
+    }
+
+    int value = *((int *)node->element);
+    printf("->%d\n", value);
+
+    if (node->left != NULL)
+        BinaryTree_visualize_tree(tree, node->left, level + 4);
+}
+
 void BinaryTree_visualize_left_to_right(BinaryTree *tree) {
     if (tree->root == NULL)
         return;
 
-    void _vis(Node * node, int level) {
-        if (node->right != NULL)
-            _vis(node->right, level + 4);
-
-        for (int i = 0; i < level; i++) {
-            printf(" ");
-        }
-
-        int value = *((int *)node->element);
-        printf("->%d\n", value);
-
-        if (node->left != NULL)
-            _vis(node->left, level + 4);
-    }
-
-    _vis(tree->root, 0);
+    BinaryTree_visualize_tree(tree, tree->root, 0);
 }
 
 void cleanup(Node *node) {
