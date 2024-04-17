@@ -251,7 +251,7 @@ void MinHeapBinaryTree_visualize_tree(MinHeapBinaryTree *tree, Node *node, int l
 void MinHeapBinaryTree_visualize_left_to_right(MinHeapBinaryTree *tree) {
     if (MinHeapBinaryTree_get_root(tree) == NULL)
         return;
-        
+
     MinHeapBinaryTree_visualize_tree(tree, MinHeapBinaryTree_get_root(tree), 0);
 }
 
