@@ -4,41 +4,24 @@
 
 #define NULL_INT -1
 
+int max(int a, int b) {
+    return (a >= b) ? a : b;
+}
+
 typedef struct _Node {
     int key;
     void *element;
-    struct _Node *previous;
-    struct _Node *next;
+    int index;
 } Node;
 
 const size_t NODE_SIZE = sizeof(Node);
 
-Node *Node_new(int key, void *element) {
+Node *Node_new(int key, void *element, int index) {
     Node *node = malloc(NODE_SIZE);
     node->key = key;
     node->element = element;
-    node->next = NULL;
-    node->previous = NULL;
+    node->index = index;
     return node;
-}
-
-void Node_set_next(Node *parent, Node *child) {
-    parent->next = child;
-    if (child != NULL) {
-        child->previous = parent;
-    }
-}
-
-void Node_set_previous(Node *parent, Node *child) {
-    parent->previous = child;
-    if (child != NULL) {
-        child->next = parent;
-    }
-}
-
-void Node_print(Node *node) {
-    int element = *((int *)node->element);
-    printf("Node(key=%d, element=%d)\n", node->key, element);
 }
 
 int Node_get_element(Node *node) {
@@ -55,8 +38,225 @@ bool Node_lt(Node *node, Node *other) {
     return node->key < other->key;
 }
 
-int main() {
+void Node_print(Node *node) {
+    if (node == NULL)
+        return;
+
+    printf("Node(k=%d, element=%d)\n", node->key, Node_get_element(node));
+}
+
+typedef struct _MinHeapBinaryTree {
+    int maxsize;
+    int size;
+    Node **list;
+} MinHeapBinaryTree;
+
+const size_t TREE_SIZE = sizeof(MinHeapBinaryTree);
+
+MinHeapBinaryTree *MinHeapBinaryTree_new(int maxsize) {
+    MinHeapBinaryTree *tree = malloc(TREE_SIZE);
+    tree->maxsize = maxsize;
+    tree->size = 0;
+    tree->list = calloc(maxsize, NODE_SIZE);
+    return tree;
+}
+
+bool MinHeapBinaryTree_is_empty(MinHeapBinaryTree *tree) {
+    return tree->size < 1;
+}
+
+bool MinHeapBinaryTree_is_full(MinHeapBinaryTree *tree) {
+    return tree->size >= tree->maxsize;
+}
+
+Node *MinHeapBinaryTree_get_root(MinHeapBinaryTree *tree) {
+    return tree->list[0];
+}
+
+void MinHeapBinaryTree_set_root(MinHeapBinaryTree *tree, Node *node) {
+    tree->list[0] = node;
+    tree->size = 1;
+}
+
+bool MinHeapBinaryTree_check_size(MinHeapBinaryTree *tree, int n) {
+    return (tree->size + n) > tree->maxsize;
+}
+
+Node *MinHeapBinaryTree_get_parent(MinHeapBinaryTree *tree, int index) {
+    if (index == 0)
+        return NULL;
+    return tree->list[(index - 1) / 2];
+}
+
+Node *MinHeapBinaryTree_get_node_parent(MinHeapBinaryTree *tree, Node *node) {
+    return MinHeapBinaryTree_get_parent(tree, node->index);
+}
+
+Node *MinHeapBinaryTree_add_left(MinHeapBinaryTree *tree, int index, int key, void *element) {
+    if (MinHeapBinaryTree_check_size(tree, 1))
+        return NULL;
+
+    int i = (2 * index) + 1;
+    Node *node = Node_new(key, element, index);
+    tree->list[i] = node;
+    tree->size++;
+    return node;
+}
+
+Node *MinHeapBinaryTree_get_left(MinHeapBinaryTree *tree, int index) {
+    return tree->list[(2 * index) + 1];
+}
+
+Node *MinHeapBinaryTree_get_node_left(MinHeapBinaryTree *tree, Node *node) {
+    return MinHeapBinaryTree_get_left(tree, node->index);
+}
+
+Node *MinHeapBinaryTree_add_right(MinHeapBinaryTree *tree, int index, int key, void *element) {
+    if (MinHeapBinaryTree_check_size(tree, 1))
+        return NULL;
+
+    int i = (2 * index) + 2;
+    Node *node = Node_new(key, element, index);
+    tree->list[i] = node;
+    tree->size++;
+    return node;
+}
+
+Node *MinHeapBinaryTree_get_right(MinHeapBinaryTree *tree, int index) {
+    return tree->list[(2 * index) + 2];
+}
+
+Node *MinHeapBinaryTree_get_node_right(MinHeapBinaryTree *tree, Node *node) {
+    return MinHeapBinaryTree_get_right(tree, node->index);
+}
+
+bool MinHeapBinaryTree_is_root(MinHeapBinaryTree *tree, Node *node) {
+    if (MinHeapBinaryTree_is_empty(tree))
+        return false;
+
+    return tree->list[0] == node;
+}
+
+void MinHeapBinaryTree_swap(MinHeapBinaryTree *tree, Node *parent, Node *child) {
+    if ((parent == NULL) || (child == NULL))
+        return;
+
+    int pindex = parent->index;
+    int cindex = child->index;
+    tree->list[pindex] = child;
+    tree->list[cindex] = parent;
+    parent->index = cindex;
+    child->index = pindex;
+}
+
+void MinHeapBinaryTree_up_heap(MinHeapBinaryTree *tree, Node *node) {
+    if (node == NULL)
+        return;
     
+    Node *parent = MinHeapBinaryTree_get_node_parent(tree, node);
+    if (parent == NULL)
+        return;
+
+    if (Node_lt(parent, node))
+        return;
+
+    MinHeapBinaryTree_swap(tree, parent, node);
+    MinHeapBinaryTree_up_heap(tree, node);
+}
+
+void MinHeapBinaryTree_down_heap(MinHeapBinaryTree *tree, Node *node) {
+    if (node == NULL)
+        return;
+    
+    Node *left = MinHeapBinaryTree_get_node_left(tree, node);
+    Node *right = MinHeapBinaryTree_get_node_right(tree, node);
+
+    if (left != NULL) {
+        Node *child_to_swap = left;
+        if (right != NULL) {
+            if (Node_lt(right, left)) {
+                child_to_swap = right;
+            }
+        }
+
+        MinHeapBinaryTree_swap(tree, node, child_to_swap);
+        MinHeapBinaryTree_down_heap(tree, node);
+    }
+}
+
+Node *MinHeapBinaryTree_insert(MinHeapBinaryTree *tree, int key, void *element) {
+    if (MinHeapBinaryTree_check_size(tree, 1))
+        return NULL;
+
+    if (MinHeapBinaryTree_is_empty(tree)) {
+        Node *node = Node_new(key, element, 0);
+        MinHeapBinaryTree_set_root(tree, node);
+        return node;
+    }
+
+    Node *node;
+    Node *parent = MinHeapBinaryTree_get_parent(tree, tree->size);
+    if (MinHeapBinaryTree_get_left(tree, parent->index) == NULL) {
+        node = MinHeapBinaryTree_add_left(tree, parent->index, key, element);
+    } else {
+        node = MinHeapBinaryTree_add_right(tree, parent->index, key, element);
+    }
+
+    MinHeapBinaryTree_up_heap(tree, node);
+    return node;
+}
+
+Node *MinHeapBinaryTree_pop(MinHeapBinaryTree *tree) {
+    if (MinHeapBinaryTree_is_empty(tree))
+        return NULL;
+
+    Node *root = MinHeapBinaryTree_get_root(tree);
+    MinHeapBinaryTree_swap(tree, root, tree->list[tree->size - 1]);
+    tree->list[root->index] = NULL;
+    MinHeapBinaryTree_down_heap(tree, tree->list[0]);
+    tree->size--;
+    return root;
+}
+
+bool MinHeapBinaryTree_is_leaf(MinHeapBinaryTree *tree, Node *node) {
+    return MinHeapBinaryTree_get_node_left(tree, node) == NULL;
+}
+
+int MinHeapBinaryTree_node_height(MinHeapBinaryTree *tree, Node *node) {
+    if (node == NULL)
+        return 0;
+    else if (MinHeapBinaryTree_is_leaf(tree, node))
+        return 1;
+    
+    return 1 + max(MinHeapBinaryTree_node_height(tree, MinHeapBinaryTree_get_node_left(tree, node)), MinHeapBinaryTree_node_height(tree, MinHeapBinaryTree_get_node_right(tree, node)));
+}
+
+void MinHeapBinaryTree_visualize_left_to_right(MinHeapBinaryTree *tree) {
+    if (MinHeapBinaryTree_get_root(tree) == NULL)
+        return;
+
+    void _vis(Node * node, int level) {
+        Node *right = MinHeapBinaryTree_get_node_right(tree, node);
+        if (right != NULL)
+            _vis(right, level + 4);
+
+        for (int i = 0; i < level; i++) {
+            printf(" ");
+        }
+
+        int value = Node_get_element(node);
+        printf("->%d\n", value);
+
+        Node *left = MinHeapBinaryTree_get_node_left(tree, node);
+        if (left != NULL)
+            _vis(left, level + 4);
+    }
+
+    _vis(MinHeapBinaryTree_get_root(tree), 0);
+}
+
+int main() {
+
 
     return 0;
 }
