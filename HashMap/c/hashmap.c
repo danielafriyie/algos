@@ -310,12 +310,12 @@ void *HashMap_remove(HashMap *map, void *key) {
 
 // HASH FUNCTIONS
 int HashMap_hash_char(HashMap *map, void *key) {
-    int length = strlen((char *)key);
+    int length = strlen(key);
     return length % map->capacity;
 }
 
 bool HashMap_compare_char(void *key1, void *key2) {
-    return strcmp((char *)key1, (char *)key2) == 0;
+    return strcmp(key1, key2) == 0;
 }
 
 void cleanup(HashMap *map) {
@@ -344,17 +344,17 @@ void cleanup(HashMap *map) {
 }
 
 int main() {
-    char key1[] = "hey";
-    int value1 = 23;
+    char key1[] = "one";
+    int value1 = 1;
 
-    char key2[] = "five";
-    int value2 = 5;
+    char key2[] = "two";
+    int value2 = 2;
 
-    char key3[] = "easy";
-    int value3 = 0;
+    char key3[] = "three";
+    int value3 = 3;
 
-    char key4[] = "difficult";
-    int value4 = 100;
+    char key4[] = "four";
+    int value4 = 4;
 
 
     HashMap *map = HashMap_new(DEFAULT_CAPACITY, DEFAULT_MULTIPLIER, DEFAULT_LOAD_FACTOR, HashMap_hash_char, HashMap_compare_char);
@@ -364,7 +364,8 @@ int main() {
     HashMap_put(map, &key4, &value4);
 
     printf("Size: %d\nContains: %d\n", map->size, HashMap_contains(map, "easy"));
-    printf("Remove: %d\n", *((int *)HashMap_remove(map, "easy")));
+    printf("Key: three, Remove: %d\n", *((int *)HashMap_remove(map, "three")));
+    printf("Get: four, value: %d\n", *((int *)HashMap_get(map, &key4)));
     printf("Size: %d\n", map->size);
     cleanup(map);
 
