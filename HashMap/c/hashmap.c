@@ -281,6 +281,7 @@ void HashMap_resize_and_rehash(HashMap *map) {
                 void *key = node->pair->key;
                 void *value = node->pair->value;
                 HashMap_put_no_check(map, key, value);
+                node = node->next;
             }
         }
         index++;
